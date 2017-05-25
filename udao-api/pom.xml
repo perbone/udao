@@ -64,14 +64,14 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>io.perbone.toobox</groupId>
-			<artifactId>toolbox</artifactId>
-			<version>0.1.0</version>
-		</dependency>
-		<dependency>
 			<groupId>io.perbone.mkey</groupId>
 			<artifactId>mkey</artifactId>
-			<version>0.1.0</version>
+			<version>${mkey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.perbone.toobox</groupId>
+			<artifactId>toolbox</artifactId>
+			<version>${toolbox.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.validation</groupId>
