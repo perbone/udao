@@ -24,6 +24,8 @@ import static io.perbone.udao.Cursor.ScrollMode.TYPE_SCROLL_SENSITIVE;
 
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 import io.perbone.udao.Cursor;
 import io.perbone.udao.DataException;
@@ -229,8 +231,27 @@ public class SimpleCursor<T> implements Cursor<T>
         return new CursorIterator();
     }
 
+    @Override
+    public Spliterator<T> spliterator()
+    {
+        final Spliterator<T> spliterator = Spliterators.spliterator(table, Spliterator.IMMUTABLE);
+
+        return spliterator;
+    }
+
+    /**
+     * Implements an immutable iterator.
+     * 
+     * @author Paulo Perbone <pauloperbone@yahoo.com>
+     * @since 0.1.0
+     */
     class CursorIterator implements Iterator<T>
     {
+        private CursorIterator()
+        {
+            // do nothing
+        }
+
         @Override
         public boolean hasNext()
         {
