@@ -539,11 +539,14 @@ public final class EntityUtils
      */
     public static String surrogateKeyHash(final Object bean) throws IllegalArgumentException
     {
-        Object id = surrogateKey(bean);
+        final Object id = surrogateKey(bean);
 
-        Class<?> type = bean.getClass();
+        if (id == null)
+            return null;
 
-        Object[] values = new Object[2];
+        final Class<?> type = bean.getClass();
+
+        final Object[] values = new Object[2];
 
         values[0] = info(type).name();
         values[1] = id;
