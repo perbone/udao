@@ -2007,7 +2007,7 @@ public final class DataManagerImpl implements DataManager
             Metadata.MetadataType mtype = field.getAnnotation(Metadata.class).value();
 
             /* CREATION_DATE */
-            if (mtype == MetadataType.CREATION_DATE && value == null)
+            if (mtype == MetadataType.CREATED_DATE && value == null)
             {
                 checkSupportedTypes(field, mtype, Date.class, Long.class);
 
@@ -2017,7 +2017,7 @@ public final class DataManagerImpl implements DataManager
                     EntityUtils.value(bean, field.getName(), now);
             }
             /* CREATION_AGENT */
-            else if (mtype == MetadataType.CREATION_AGENT && value == null)
+            else if (mtype == MetadataType.CREATED_SERVICE && value == null)
             {
                 checkSupportedTypes(field, mtype, String.class);
 
@@ -2082,7 +2082,7 @@ public final class DataManagerImpl implements DataManager
                     EntityUtils.value(bean, field.getName(), now);
             }
             /* LAST_ACCESS_AGENT */
-            else if (mtype == MetadataType.LAST_ACCESS_AGENT)
+            else if (mtype == MetadataType.LAST_ACCESS_SERVICE)
             {
                 checkSupportedTypes(field, mtype, String.class);
 
@@ -2124,7 +2124,7 @@ public final class DataManagerImpl implements DataManager
                     EntityUtils.value(bean, field.getName(), now);
             }
             /* LAST_ACCESS_AGENT */
-            else if (mtype == MetadataType.LAST_ACCESS_AGENT)
+            else if (mtype == MetadataType.LAST_ACCESS_SERVICE)
             {
                 checkSupportedTypes(field, mtype, String.class);
 
@@ -2142,7 +2142,7 @@ public final class DataManagerImpl implements DataManager
                     EntityUtils.value(bean, field.getName(), now);
             }
             /* LAST_MODIFIED_AGENT */
-            else if (mtype == MetadataType.LAST_MODIFIED_AGENT)
+            else if (mtype == MetadataType.LAST_MODIFIED_SERVICE)
             {
                 checkSupportedTypes(field, mtype, String.class);
 

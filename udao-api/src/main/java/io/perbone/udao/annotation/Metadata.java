@@ -80,75 +80,74 @@ public @interface Metadata
         PRINCIPAL,
 
         /**
-         * The bean creation date and time. It assumes a date data type.
+         * Date and time when this data was created.
          * <p>
          * This meta-data type implies Immutable constraints.
          * 
          * @see MetadataType#CREATION_AUTHOR
          * @see MetadataType#CREATION_AGENT
          */
-        CREATION_DATE,
+        CREATED_DATE,
 
         /**
-         * The bean creation author.
+         * ID of the principal who created this data.
          * <p>
          * This meta-data type implies NotNull, Immutable and Authentication constraints.
-         * 
          * 
          * @see MetadataType#PRINCIPAL
          * @see MetadataType#CREATION_DATE
          * @see MetadataType#CREATION_AGENT
          */
-        CREATION_AUTHOR,
+        CREATED_BY,
 
         /**
-         * The application agent creation author.
+         * ID of the service principal who created this data.
          * <p>
          * This meta-data type implies NotNull, Immutable and Authentication constraints.
          */
-        CREATION_AGENT,
+        CREATED_SERVICE,
 
         /**
-         * The bean last access date and time. It assumes a date data type.
+         * Date and time when when this data was most recently accessed.
          * 
          * @See {@link #LAST_ACCESS_AUTHOR LAST_ACCESS_AUTHOR}
          */
         LAST_ACCESS_DATE,
 
         /**
-         * The bean last access author.
+         * ID of the principal who last access this data.
          * <p>
          * This meta-data type implies Authentication constraint.
          * 
          * @See {@link #LAST_ACCESS_DATE LAST_ACCESS_DATE}
          */
-        LAST_ACCESS_AUTHOR,
+        LAST_ACCESS_BY,
 
         /**
-         * The application agent last access author.
+         * ID of the service principal who last access this data.
          */
-        LAST_ACCESS_AGENT,
+        LAST_ACCESS_SERVICE,
 
         /**
-         * The bean last update date and time. It assumes a date data type.
+         * Date and time when a principal last updated this data.
          * 
          * @See {@link #LAST_MODIFIED_AUTHOR LAST_MODIFIED_AUTHOR}
          */
         LAST_MODIFIED_DATE,
 
         /**
-         * The bean last update author.
+         * ID of the principal who last updated this data.
          * <p>
          * This meta-data type implies Authentication constraint.
          * 
          * @See {@link #LAST_MODIFIED_DATE LAST_MODIFIED_DATE}
          */
-        LAST_MODIFIED_AUTHOR,
+        LAST_MODIFIED_BY,
 
         /**
-         * The application agent last update author.
+         * ID of the service principal who last updated this data.
          */
-        LAST_MODIFIED_AGENT,
+        LAST_MODIFIED_SERVICE,
 
         /**
          * Time to live constraint.
