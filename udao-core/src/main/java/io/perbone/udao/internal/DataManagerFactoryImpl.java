@@ -29,6 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import io.perbone.toolbox.provider.NotEnoughResourceException;
 import io.perbone.toolbox.settings.BackingStoreException;
 import io.perbone.toolbox.settings.InvalidSettingsException;
 import io.perbone.toolbox.settings.Settings;
@@ -36,7 +37,6 @@ import io.perbone.toolbox.validation.StringValidations;
 import io.perbone.udao.DataException;
 import io.perbone.udao.DataManager;
 import io.perbone.udao.DataManagerFactory;
-import io.perbone.udao.NotEnoughResourceException;
 import io.perbone.udao.configuration.CacheEntry;
 import io.perbone.udao.configuration.Configuration;
 import io.perbone.udao.configuration.EntityEntry;

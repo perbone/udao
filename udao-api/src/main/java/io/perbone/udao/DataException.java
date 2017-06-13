@@ -19,13 +19,15 @@
 
 package io.perbone.udao;
 
+import io.perbone.toolbox.provider.ProviderException;
+
 /**
  * Root exception for UDAO framework.
  * 
  * @author Paulo Perbone <pauloperbone@yahoo.com>
  * @since 0.1.0
  */
-public class DataException extends RuntimeException
+public class DataException extends ProviderException
 {
     /** Class {@code DataException} serial version identifier. */
     private static final long serialVersionUID = 1L;

@@ -29,14 +29,14 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.perbone.toolbox.provider.NotEnoughResourceException;
+import io.perbone.toolbox.provider.OperationTimeoutException;
 import io.perbone.toolbox.settings.Property;
 import io.perbone.toolbox.validation.StringValidations;
 import io.perbone.udao.DataConstraintViolationException;
 import io.perbone.udao.DataException;
 import io.perbone.udao.KeyViolationException;
-import io.perbone.udao.NotEnoughResourceException;
 import io.perbone.udao.NotFoundException;
-import io.perbone.udao.OperationTimeoutException;
 import io.perbone.udao.spi.DataProvider;
 import io.perbone.udao.spi.DataProviderException;
 import io.perbone.udao.spi.DataSource;

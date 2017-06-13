@@ -21,6 +21,7 @@ package io.perbone.udao;
 
 import java.util.concurrent.TimeUnit;
 
+import io.perbone.toolbox.provider.NotEnoughResourceException;
 import io.perbone.toolbox.settings.BackingStoreException;
 import io.perbone.toolbox.settings.InvalidSettingsException;
 

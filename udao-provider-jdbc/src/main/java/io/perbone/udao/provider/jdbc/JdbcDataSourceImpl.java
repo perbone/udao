@@ -43,13 +43,13 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.perbone.toolbox.collection.Pair;
+import io.perbone.toolbox.provider.NotEnoughResourceException;
+import io.perbone.toolbox.provider.OperationTimeoutException;
 import io.perbone.toolbox.validation.StringValidations;
 import io.perbone.udao.Cursor;
 import io.perbone.udao.DataConstraintViolationException;
 import io.perbone.udao.KeyViolationException;
-import io.perbone.udao.NotEnoughResourceException;
 import io.perbone.udao.NotFoundException;
-import io.perbone.udao.OperationTimeoutException;
 import io.perbone.udao.annotation.DataType;
 import io.perbone.udao.query.Expression;
 import io.perbone.udao.query.NativeQuery;

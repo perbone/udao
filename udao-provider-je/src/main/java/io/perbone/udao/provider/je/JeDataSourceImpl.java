@@ -33,13 +33,13 @@ import com.sleepycat.je.OperationStatus;
 import com.sleepycat.je.SecondaryDatabase;
 import com.sleepycat.je.SecondaryKeyCreator;
 
+import io.perbone.toolbox.provider.NotEnoughResourceException;
+import io.perbone.toolbox.provider.OperationTimeoutException;
 import io.perbone.toolbox.serialization.Serializer;
 import io.perbone.udao.Cursor;
 import io.perbone.udao.DataConstraintViolationException;
 import io.perbone.udao.KeyViolationException;
-import io.perbone.udao.NotEnoughResourceException;
 import io.perbone.udao.NotFoundException;
-import io.perbone.udao.OperationTimeoutException;
 import io.perbone.udao.query.NativeQuery;
 import io.perbone.udao.query.Query;
 import io.perbone.udao.spi.Cache;

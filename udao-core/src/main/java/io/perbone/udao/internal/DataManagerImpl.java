@@ -36,6 +36,8 @@ import org.slf4j.LoggerFactory;
 
 import io.perbone.toolbox.annotation.AnnotationScanner;
 import io.perbone.toolbox.id.IdFactory;
+import io.perbone.toolbox.provider.NotEnoughResourceException;
+import io.perbone.toolbox.provider.OperationTimeoutException;
 import io.perbone.toolbox.security.Fortuna;
 import io.perbone.toolbox.validation.StringValidations;
 import io.perbone.udao.Cursor;
@@ -43,9 +45,7 @@ import io.perbone.udao.DataConstraintViolationException;
 import io.perbone.udao.DataException;
 import io.perbone.udao.DataManager;
 import io.perbone.udao.KeyViolationException;
-import io.perbone.udao.NotEnoughResourceException;
 import io.perbone.udao.NotFoundException;
-import io.perbone.udao.OperationTimeoutException;
 import io.perbone.udao.annotation.AlternateKey;
 import io.perbone.udao.annotation.AlternateKeys;
 import io.perbone.udao.annotation.DataType;

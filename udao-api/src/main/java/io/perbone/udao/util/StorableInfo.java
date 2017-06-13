@@ -28,6 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import io.perbone.udao.annotation.ConsistencyLevel;
 import io.perbone.udao.annotation.InstanceType;
 import io.perbone.udao.annotation.PersistenceType;
+import io.perbone.udao.annotation.Storable;
 
 /**
  * Utility class for easy access of {@link Storable} bean object information.
