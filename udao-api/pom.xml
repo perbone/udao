@@ -69,7 +69,7 @@
 			<version>${mkey.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.perbone.toobox</groupId>
+			<groupId>io.perbone.toolbox</groupId>
 			<artifactId>toolbox</artifactId>
 			<version>${toolbox.version}</version>
 		</dependency>
