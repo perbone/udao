@@ -38,6 +38,7 @@ import io.perbone.toolbox.provider.OperationTimeoutException;
 import io.perbone.toolbox.serialization.Serializer;
 import io.perbone.udao.Cursor;
 import io.perbone.udao.DataConstraintViolationException;
+import io.perbone.udao.DataException;
 import io.perbone.udao.KeyViolationException;
 import io.perbone.udao.NotFoundException;
 import io.perbone.udao.query.NativeQuery;
@@ -319,8 +320,42 @@ class JeDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.updateI(txn, cache, bean, id);
+        final Class<?> type = bean.getClass();
+
+        final StorableInfo sinfo = EntityUtils.info(type);
+
+        final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
+
+        final Database db = provider.openDatabase(txn, tableName);
+
+        try
+        {
+            final byte[] bytes = serializer.deflate(bean);
+
+            final String skey = EntityUtils.surrogateKeyHash(bean);
+            final String pkey = EntityUtils.primaryKeyHash(bean);
+
+            final DatabaseEntry key = new DatabaseEntry(skey == null ? getBytes(pkey) : getBytes(skey));
+            final DatabaseEntry data = new DatabaseEntry(bytes);
+
+            final OperationStatus status = db.put(getTransaction(txn), key, data);
+
+            if (status != OperationStatus.SUCCESS)
+                throw new DataProviderException(MESSAGE_COULD_NOT_UPDATE);
+
+            /* Caches it */
+            cacheIt(txn, cache, bean);
+        }
+        catch (final DatabaseException dbe)
+        {
+            throw new DataProviderException(MESSAGE_COULD_NOT_UPDATE, dbe);
+        }
+        finally
+        {
+            provider.closeDatabase(txn, db);
+        }
+
+        return bean;
     }
 
     @Override

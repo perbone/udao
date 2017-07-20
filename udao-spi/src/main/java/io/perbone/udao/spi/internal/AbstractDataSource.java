@@ -64,6 +64,8 @@ public abstract class AbstractDataSource implements DataSource
 
     protected String MESSAGE_FOREIGN_KEY_VIOLATION = "Foreign key constraint fails";
 
+    protected String MESSAGE_COULD_NOT_UPDATE = "Could not update an entity in the store";
+
     private final AtomicBoolean open = new AtomicBoolean(false);
 
     public AbstractDataSource()
