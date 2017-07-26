@@ -329,8 +329,19 @@ class JeDataSourceImpl extends AbstractDataSource
             throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException, TransactionException,
             OperationTimeoutException, NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.containsI(txn, cache, type, id);
+        if (cache.containsI(id))
+            return true;
+
+        try
+        {
+            fetchI(txn, cache, type, id);
+        }
+        catch (final NotFoundException e)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
