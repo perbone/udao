@@ -239,7 +239,7 @@ class JeDataSourceImpl extends AbstractDataSource
             final OperationStatus status = db.get(getTransaction(txn), key, data, LockMode.DEFAULT);
 
             if (status == OperationStatus.NOTFOUND)
-                throw new NotFoundException("The surrogate key did not match any bean");
+                throw new NotFoundException("The key did not match any bean");
 
             // Instantiate and populate a new bean
             bean = serializer.inflate(type, data.getData());
@@ -273,8 +273,45 @@ class JeDataSourceImpl extends AbstractDataSource
             throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException, TransactionException,
             NotFoundException, OperationTimeoutException, NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.fetchP(txn, cache, type, keys);
+        T bean = cache.getP(keys);
+
+        if (bean != null)
+            return bean;
+
+        final StorableInfo sinfo = EntityUtils.info(type);
+
+        final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
+
+        final Database db = provider.openDatabase(txn, tableName);
+
+        try
+        {
+            final String pkey = EntityUtils.primaryKeyHash(bean);
+
+            final DatabaseEntry key = new DatabaseEntry(getBytes(pkey));
+            final DatabaseEntry data = new DatabaseEntry();
+
+            final OperationStatus status = db.get(getTransaction(txn), key, data, LockMode.DEFAULT);
+
+            if (status == OperationStatus.NOTFOUND)
+                throw new NotFoundException("The key did not match any bean");
+
+            // Instantiate and populate a new bean
+            bean = serializer.inflate(type, data.getData());
+
+            /* Caches it */
+            cacheIt(txn, cache, bean);
+        }
+        catch (final DatabaseException dbe)
+        {
+            throw new DataProviderException(dbe);
+        }
+        finally
+        {
+            provider.closeDatabase(txn, db);
+        }
+
+        return bean;
     }
 
     @Override
