@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import com.sleepycat.je.CursorConfig;
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
@@ -38,7 +39,6 @@ import io.perbone.toolbox.provider.OperationTimeoutException;
 import io.perbone.toolbox.serialization.Serializer;
 import io.perbone.udao.Cursor;
 import io.perbone.udao.DataConstraintViolationException;
-import io.perbone.udao.DataException;
 import io.perbone.udao.KeyViolationException;
 import io.perbone.udao.NotFoundException;
 import io.perbone.udao.query.NativeQuery;
@@ -669,7 +669,10 @@ class JeDataSourceImpl extends AbstractDataSource
             final DatabaseEntry key = new DatabaseEntry();
             final DatabaseEntry data = new DatabaseEntry();
 
-            com.sleepycat.je.Cursor cursor = db.openCursor(getTransaction(txn), null);
+            // The current cursor implementation uses a buffer to hold all records and it is forward
+            // only so it is safe to use a lock of type READ_COMMITTED as it has better performance
+            // and less locking contention resulting on higher concurrency between threads.
+            com.sleepycat.je.Cursor cursor = db.openCursor(getTransaction(txn), CursorConfig.READ_COMMITTED);
 
             while (cursor.getNext(key, data, LockMode.DEFAULT) == OperationStatus.SUCCESS)
             {
@@ -754,7 +757,10 @@ class JeDataSourceImpl extends AbstractDataSource
             final DatabaseEntry key = new DatabaseEntry();
             final DatabaseEntry data = new DatabaseEntry();
 
-            com.sleepycat.je.Cursor cursor = db.openCursor(getTransaction(txn), null);
+            // The current cursor implementation uses a buffer to hold all records and it is forward
+            // only so it is safe to use a lock of type READ_COMMITTED as it has better performance
+            // and less locking contention resulting on higher concurrency between threads.
+            com.sleepycat.je.Cursor cursor = db.openCursor(getTransaction(txn), CursorConfig.READ_COMMITTED);
 
             long count = 1;
 
