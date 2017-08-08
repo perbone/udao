@@ -57,7 +57,7 @@
 		<junit.version>4.12</junit.version>
 		<slf4j.version>1.7.25</slf4j.version>
 		<mkey.version>0.1.0</mkey.version>
-		<toolbox.version>0.2.0-SNAPSHOT</toolbox.version>
+		<toolbox.version>0.2.0</toolbox.version>
 		<validation-api.version>2.0.0.CR3</validation-api.version>
 	</properties>
 	<repositories>
