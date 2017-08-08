@@ -34,9 +34,12 @@ import org.slf4j.LoggerFactory;
 
 import com.sleepycat.je.Database;
 import com.sleepycat.je.DatabaseConfig;
+import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.Environment;
 import com.sleepycat.je.EnvironmentConfig;
+import com.sleepycat.je.SecondaryDatabase;
+import com.sleepycat.je.SecondaryKeyCreator;
 import com.sleepycat.je.TransactionConfig;
 
 import io.perbone.mkey.CacheBuilder;
@@ -60,6 +63,7 @@ import io.perbone.udao.transaction.InvalidTransactionException;
 import io.perbone.udao.transaction.IsolationLevel;
 import io.perbone.udao.transaction.Transaction;
 import io.perbone.udao.transaction.TransactionException;
+import io.perbone.udao.util.StorableInfo;
 
 /**
  * Concrete implementation of {@link DataProvider} for JE storage.
@@ -448,6 +452,28 @@ public final class JeDataProviderImpl extends AbstractDataProvider
     }
 
     /**
+     * Returns a {@link SecondaryKeyCreator} implementation that matches the given storage info
+     * type.
+     * 
+     * @param sinfo
+     *            the storage info object for the creator
+     * 
+     * @return a {@link SecondaryKeyCreator} concrete object
+     */
+    SecondaryKeyCreator getSecondaryKeyCreator(final StorableInfo sinfo)
+    {
+        SecondaryKeyCreator creator = secondaryKeyCreatorCache.get(sinfo.type());
+
+        if (creator == null)
+        {
+            creator = new SecondaryKeyCreatorImpl(sinfo, serializer);
+            secondaryKeyCreatorCache.put(creator, sinfo.type());
+        }
+
+        return creator;
+    }
+
+    /**
      * Opens, and optionally creates, a Database.
      * 
      * @param txn
@@ -489,5 +515,31 @@ public final class JeDataProviderImpl extends AbstractDataProvider
                     "Invalid transaction; object is not an instance of JeTransactionImpl");
         if (!txn.isActive())
             throw new InvalidTransactionException("Invalid transaction; object is no longer active");
+    }
+
+    /**
+     * Concrete implementation of {@link SecondaryKeyCreator} for JE storage.
+     * 
+     * @author Paulo Perbone <pauloperbone@yahoo.com>
+     * @since 0.1.0
+     */
+    static class SecondaryKeyCreatorImpl implements SecondaryKeyCreator
+    {
+        final StorableInfo sinfo;
+        final Serializer serializer;
+
+        public SecondaryKeyCreatorImpl(final StorableInfo sinfo, final Serializer serializer)
+        {
+            this.sinfo = sinfo;
+            this.serializer = serializer;
+        }
+
+        @Override
+        public boolean createSecondaryKey(final SecondaryDatabase secondary, final DatabaseEntry key,
+                final DatabaseEntry data, final DatabaseEntry result)
+        {
+            // TODO Auto-generated method stub
+            return false;
+        }
     }
 }

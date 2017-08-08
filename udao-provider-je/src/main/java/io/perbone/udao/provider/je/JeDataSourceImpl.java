@@ -31,7 +31,6 @@ import com.sleepycat.je.DatabaseEntry;
 import com.sleepycat.je.DatabaseException;
 import com.sleepycat.je.LockMode;
 import com.sleepycat.je.OperationStatus;
-import com.sleepycat.je.SecondaryDatabase;
 import com.sleepycat.je.SecondaryKeyCreator;
 
 import io.perbone.toolbox.provider.NotEnoughResourceException;
@@ -71,15 +70,12 @@ class JeDataSourceImpl extends AbstractDataSource
 
     private final Charset charset = Charset.forName(CHARSET_UTF8);
 
-    private final io.perbone.mkey.Cache secondaryKeyCreatorCache;
-
     public JeDataSourceImpl(final JeDataProviderImpl provider)
     {
         super();
 
         this.provider = provider;
         this.serializer = provider.getSerializer();
-        this.secondaryKeyCreatorCache = provider.getSecondaryKeyCreatorCache();
     }
 
     @Override
@@ -109,8 +105,7 @@ class JeDataSourceImpl extends AbstractDataSource
 
         final Database db = provider.openDatabase(txn, tableName);
 
-        // FIXME should this be in the provider?
-        final SecondaryKeyCreator creator = getSecondaryKeyCreator(sinfo);
+        final SecondaryKeyCreator creator = provider.getSecondaryKeyCreator(sinfo);
 
         try
         {
@@ -1015,49 +1010,5 @@ class JeDataSourceImpl extends AbstractDataSource
     {
         if (!transactionInProgress(txn))
             cache.add(bean); // Save to cache it
-    }
-
-    /**
-     * 
-     * @param sinfo
-     * @return
-     */
-    private SecondaryKeyCreator getSecondaryKeyCreator(final StorableInfo sinfo)
-    {
-        SecondaryKeyCreator creator = secondaryKeyCreatorCache.get(sinfo.type());
-
-        if (creator == null)
-        {
-            creator = new SecondaryKeyCreatorImpl(sinfo, serializer);
-            secondaryKeyCreatorCache.put(creator, sinfo.type());
-        }
-
-        return creator;
-    }
-
-    /**
-     * Concrete implementation of {@link SecondaryKeyCreator} for JE storage.
-     * 
-     * @author Paulo Perbone <pauloperbone@yahoo.com>
-     * @since 0.1.0
-     */
-    static class SecondaryKeyCreatorImpl implements SecondaryKeyCreator
-    {
-        final StorableInfo sinfo;
-        final Serializer serializer;
-
-        public SecondaryKeyCreatorImpl(final StorableInfo sinfo, final Serializer serializer)
-        {
-            this.sinfo = sinfo;
-            this.serializer = serializer;
-        }
-
-        @Override
-        public boolean createSecondaryKey(final SecondaryDatabase secondary, final DatabaseEntry key,
-                final DatabaseEntry data, final DatabaseEntry result)
-        {
-            // TODO Auto-generated method stub
-            return false;
-        }
     }
 }
