@@ -69,7 +69,7 @@
 		<dependency>
 			<groupId>io.perbone.udao</groupId>
 			<artifactId>udao-spi</artifactId>
-			<version>0.3.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
