@@ -390,7 +390,7 @@ public final class JeDataProviderImpl extends AbstractDataProvider
         {
             if (txn == null)
             {
-                db = openoOrCreateDatabase(txn, tableName);
+                db = openOrCreateDatabase(txn, tableName);
             }
             else
             {
@@ -407,7 +407,7 @@ public final class JeDataProviderImpl extends AbstractDataProvider
 
                 if (db == null)
                 {
-                    db = openoOrCreateDatabase(txn, tableName);
+                    db = openOrCreateDatabase(txn, tableName);
                 }
             }
         }
@@ -486,7 +486,7 @@ public final class JeDataProviderImpl extends AbstractDataProvider
      * @throws DatabaseException
      *             if an error occurs during this operation
      */
-    private Database openoOrCreateDatabase(final Transaction txn, final String tableName) throws DatabaseException
+    private Database openOrCreateDatabase(final Transaction txn, final String tableName) throws DatabaseException
     {
         final DatabaseConfig dbConfig = new DatabaseConfig();
 
