@@ -341,9 +341,9 @@ public final class JeDataProviderImpl extends AbstractDataProvider
             serializer = new JSONSerializer(); // FIXME use compressPayload flag
             secondaryKeyCreatorCache = CacheBuilder
                     .newInstance()
-                    .hardLimitSize(100L)
+                    .hardLimitSize(200L)
                     .garbagePolicy(GarbagePolicy.ACCESS_TIMEOUT)
-                    .accessTimeout(3L, TimeUnit.MINUTES)
+                    .accessTimeout(30L, TimeUnit.MINUTES)
                     .evictionPolicy(EvictionPolicy.LRU)
                     .build();
         }
