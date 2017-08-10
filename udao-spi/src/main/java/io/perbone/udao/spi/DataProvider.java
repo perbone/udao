@@ -155,6 +155,33 @@ public interface DataProvider
     boolean isReadOnly();
 
     /**
+     * Tells whether or not this provider belongs to an high availability cluster environment.
+     * <p>
+     * Not all providers support this feature and when not supported it is up to the provider what
+     * to return.
+     * 
+     * @return <tt>true</tt> if it is high availability; <tt>false</tt> otherwise
+     * 
+     * @see #isMaster
+     */
+    boolean isHighAvailability();
+
+    /**
+     * Tells whether or not this provider is a master provider.
+     * <p>
+     * This is for cluster and master/slave environments where there are more than one storage unit
+     * available and some are masters and some are slaves.
+     * <p>
+     * Not all providers support this feature and when not supported it is up to the provider what
+     * to return.
+     * 
+     * @return <tt>true</tt> if it is master; <tt>false</tt> otherwise
+     * 
+     * @see #isHighAvailability
+     */
+    boolean isMaster();
+
+    /**
      * Sets the read-only value for this provider.
      * 
      * @param value

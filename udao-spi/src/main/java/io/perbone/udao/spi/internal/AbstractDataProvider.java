@@ -203,6 +203,18 @@ public abstract class AbstractDataProvider implements DataProvider
     }
 
     @Override
+    public boolean isHighAvailability()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean isMaster()
+    {
+        return false;
+    }
+
+    @Override
     public Set<Class<?>> getTypes() throws IllegalStateException, DataProviderException
     {
         checkShutdownInProgress();
