@@ -158,7 +158,7 @@ public final class JdbcDataProviderImpl extends AbstractDataProvider
         checkActive();
         checkShutdownInProgress();
 
-        DataSource ds = new JdbcDataSourceImpl(this, dialect, fetchSize, queryTimeout);
+        final DataSource ds = new JdbcDataSourceImpl(this, dialect, fetchSize, queryTimeout);
 
         ds.open();
 
@@ -208,7 +208,7 @@ public final class JdbcDataProviderImpl extends AbstractDataProvider
 
         checkTransaction(txn);
 
-        Connection conn = ((JdbcTransactionImpl) txn).getConnection();
+        final Connection conn = ((JdbcTransactionImpl) txn).getConnection();
 
         try
         {
@@ -253,7 +253,7 @@ public final class JdbcDataProviderImpl extends AbstractDataProvider
 
         checkTransaction(txn);
 
-        Connection conn = ((JdbcTransactionImpl) txn).getConnection();
+        final Connection conn = ((JdbcTransactionImpl) txn).getConnection();
 
         try
         {
@@ -290,7 +290,7 @@ public final class JdbcDataProviderImpl extends AbstractDataProvider
 
         dialect = SqlDialect.parse(driver);
 
-        String sessionInfo = isReadOnly() ? "Read-Only; " + hostName() : hostName();
+        final String sessionInfo = isReadOnly() ? "Read-Only; " + hostName() : hostName();
 
         /* Dialect specifics settings */
         if (dialect == SqlDialect.POSTGRESQL)
@@ -389,7 +389,7 @@ public final class JdbcDataProviderImpl extends AbstractDataProvider
     {
         try
         {
-            Connection conn = poolDS.getConnection();
+            final Connection conn = poolDS.getConnection();
 
             if (StringValidations.isValid(applicationName))
                 conn.setClientInfo("ApplicationName", applicationName);
