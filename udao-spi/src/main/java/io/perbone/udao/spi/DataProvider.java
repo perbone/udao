@@ -157,6 +157,9 @@ public interface DataProvider
     /**
      * Tells whether or not this provider belongs to an high availability cluster environment.
      * <p>
+     * This status could change during the life-cycle of the provider so the user should call this
+     * method before performing any logic based on this assumption.
+     * <p>
      * Not all providers support this feature and when not supported it is up to the provider what
      * to return.
      * 
@@ -170,7 +173,7 @@ public interface DataProvider
      * Tells whether or not this provider is a master provider.
      * <p>
      * This is for cluster and master/slave environments where there are more than one storage unit
-     * available and some are masters and some are slaves. This status can change during the
+     * available and some are masters and some are slaves. This status could change during the
      * life-cycle of the provider so the user should call this method before performing any logic
      * based on this assumption.
      * <p>
