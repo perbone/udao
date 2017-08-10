@@ -35,9 +35,7 @@ import io.perbone.udao.util.EntityUtils;
 final class CacheImpl implements Cache
 {
     private final Class<?> type;
-
-    /* The backing cache store */
-    private io.perbone.mkey.Cache cache;
+    private final io.perbone.mkey.Cache cache; // The backing cache store
 
     public CacheImpl(final Class<?> type, final io.perbone.mkey.Cache cache) throws IllegalArgumentException
     {
@@ -56,11 +54,11 @@ final class CacheImpl implements Cache
         if (bean == null)
             throw new IllegalArgumentException("Cannot cache a null bean");
 
-        String skey = EntityUtils.surrogateKeyHash(bean);
-        String pkey = EntityUtils.primaryKeyHash(bean);
-        List<String> akeys = EntityUtils.alternateKeyHashes(bean);
+        final String skey = EntityUtils.surrogateKeyHash(bean);
+        final String pkey = EntityUtils.primaryKeyHash(bean);
+        final List<String> akeys = EntityUtils.alternateKeyHashes(bean);
 
-        List<String> keys = new ArrayList<String>();
+        final List<String> keys = new ArrayList<String>();
 
         if (skey != null)
             keys.add(skey);
@@ -96,7 +94,7 @@ final class CacheImpl implements Cache
         if (id == null)
             throw new IllegalArgumentException("ID must not be null");
 
-        String skey = EntityUtils.surrogateKeyHash(type, id);
+        final String skey = EntityUtils.surrogateKeyHash(type, id);
 
         return get(skey);
     }
@@ -107,7 +105,7 @@ final class CacheImpl implements Cache
         if (keys.length == 0)
             throw new IllegalArgumentException("Primary key must not be empty neither null");
 
-        String pkey = EntityUtils.primaryKeyHash(type, keys);
+        final String pkey = EntityUtils.primaryKeyHash(type, keys);
 
         return get(pkey);
     }
@@ -120,7 +118,7 @@ final class CacheImpl implements Cache
         if (keys.length == 0)
             throw new IllegalArgumentException("Alternate keys must not be empty neither null");
 
-        String akey = EntityUtils.alternateKeyHash(type, name, keys);
+        final String akey = EntityUtils.alternateKeyHash(type, name, keys);
 
         return get(akey);
     }
@@ -134,9 +132,9 @@ final class CacheImpl implements Cache
     @Override
     public boolean contains(final Object bean)
     {
-        String skey;
-        String pkey;
-        List<String> akeys;
+        final String skey;
+        final String pkey;
+        final List<String> akeys;
 
         if ((skey = EntityUtils.surrogateKeyHash(bean)) != null)
         {
@@ -156,13 +154,15 @@ final class CacheImpl implements Cache
             return false;
         }
         else
+        {
             return false;
+        }
     }
 
     @Override
     public boolean containsI(final Object id)
     {
-        String skey = EntityUtils.surrogateKeyHash(type, id);
+        final String skey = EntityUtils.surrogateKeyHash(type, id);
 
         return skey == null ? false : cache.contains(skey);
     }
@@ -170,7 +170,7 @@ final class CacheImpl implements Cache
     @Override
     public boolean containsP(final Object... keys)
     {
-        String pkey = EntityUtils.primaryKeyHash(type, keys);
+        final String pkey = EntityUtils.primaryKeyHash(type, keys);
 
         return pkey == null ? false : cache.contains(pkey);
     }
@@ -178,7 +178,7 @@ final class CacheImpl implements Cache
     @Override
     public boolean containsA(final String name, final Object... keys)
     {
-        String akey = EntityUtils.alternateKeyHash(type, name, keys);
+        final String akey = EntityUtils.alternateKeyHash(type, name, keys);
 
         return akey == null ? false : cache.contains(akey);
     }
@@ -189,9 +189,9 @@ final class CacheImpl implements Cache
         if (bean == null)
             throw new IllegalArgumentException("Bean must not be null");
 
-        String skey = EntityUtils.surrogateKeyHash(bean);
-        String pkey = EntityUtils.primaryKeyHash(bean);
-        List<String> akeys = EntityUtils.alternateKeyHashes(bean);
+        final String skey = EntityUtils.surrogateKeyHash(bean);
+        final String pkey = EntityUtils.primaryKeyHash(bean);
+        final List<String> akeys = EntityUtils.alternateKeyHashes(bean);
 
         if (skey != null)
             cache.remove(skey);
@@ -207,7 +207,7 @@ final class CacheImpl implements Cache
         if (id == null)
             throw new IllegalArgumentException("ID must not be null");
 
-        String skey = EntityUtils.surrogateKeyHash(type, id);
+        final String skey = EntityUtils.surrogateKeyHash(type, id);
 
         cache.remove(skey);
     }
@@ -218,7 +218,7 @@ final class CacheImpl implements Cache
         if (keys.length == 0)
             throw new IllegalArgumentException("Primary key must not be empty neither null");
 
-        String pkey = EntityUtils.primaryKeyHash(type, keys);
+        final String pkey = EntityUtils.primaryKeyHash(type, keys);
 
         cache.remove(pkey);
     }
@@ -231,7 +231,7 @@ final class CacheImpl implements Cache
         if (keys.length == 0)
             throw new IllegalArgumentException("Alternate keys must not be empty neither null");
 
-        String akey = EntityUtils.alternateKeyHash(type, name, keys);
+        final String akey = EntityUtils.alternateKeyHash(type, name, keys);
 
         cache.remove(akey);
     }
@@ -242,7 +242,7 @@ final class CacheImpl implements Cache
         if (id == null)
             throw new IllegalArgumentException("ID must not be null");
 
-        String skey = EntityUtils.surrogateKeyHash(type, id);
+        final String skey = EntityUtils.surrogateKeyHash(type, id);
 
         return cache.remove(skey);
     }
@@ -253,7 +253,7 @@ final class CacheImpl implements Cache
         if (keys.length == 0)
             throw new IllegalArgumentException("Primary key must not be empty neither null");
 
-        String pkey = EntityUtils.primaryKeyHash(type, keys);
+        final String pkey = EntityUtils.primaryKeyHash(type, keys);
 
         return cache.remove(pkey);
     }
@@ -266,7 +266,7 @@ final class CacheImpl implements Cache
         if (keys.length == 0)
             throw new IllegalArgumentException("Alternate keys must not be empty neither null");
 
-        String akey = EntityUtils.alternateKeyHash(type, name, keys);
+        final String akey = EntityUtils.alternateKeyHash(type, name, keys);
 
         return cache.remove(akey);
     }
@@ -312,7 +312,8 @@ final class CacheImpl implements Cache
     @SuppressWarnings("unchecked")
     private <T> T get(final String key)
     {
-        Object bean = cache.get(key);
+        final Object bean = cache.get(key);
+
         return (T) (bean == null ? null : EntityUtils.clone(bean));
     }
 }
