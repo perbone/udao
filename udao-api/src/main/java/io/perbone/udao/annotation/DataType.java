@@ -59,12 +59,23 @@ public enum DataType
      * Any primitive type can be defined as an array
      */
 
-    BOOLEAN, CHAR, BYTE, SHORT, INT, LONG, BIGINTEGER, FLOAT, DOUBLE, BIGDECIMAL,
+    BOOLEAN,
+    CHAR,
+    BYTE,
+    SHORT,
+    INT,
+    LONG,
+    BIGINTEGER,
+    FLOAT,
+    DOUBLE,
+    BIGDECIMAL,
 
     /**
      * Date and time types
      */
-    DATE, TIME, TIMESTAMP,
+    DATE,
+    TIME,
+    TIMESTAMP,
 
     /**
      * COMPLEX TYPES
@@ -84,5 +95,13 @@ public enum DataType
      * </pre>
      */
 
-    BYTES, STRING, ID, REF, LIST, ENUM, TUPLE, SET, MAP
+    BYTES,
+    STRING,
+    ID,
+    REF,
+    LIST,
+    ENUM,
+    TUPLE,
+    SET,
+    MAP
 }

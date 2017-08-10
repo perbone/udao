@@ -232,15 +232,18 @@ public class Configuration
 
             Integer level = cacheNode.containsKey(KEY_EXP_LEVEL) ? cacheNode.getInt(KEY_EXP_LEVEL) : cacheEntry.level();
             Boolean defaultCache = cacheNode.containsKey(KEY_EXP_DEFAULT)
-                    ? Boolean.valueOf(cacheNode.getString(KEY_EXP_DEFAULT)) : cacheEntry.defaultCache();
+                    ? Boolean.valueOf(cacheNode.getString(KEY_EXP_DEFAULT))
+                    : cacheEntry.defaultCache();
             Long hardLimitSize = cacheNode.containsKey(KEY_EXP_HARD_LIMIT_SIZE)
-                    ? (Long) cacheNode.getLong(KEY_EXP_HARD_LIMIT_SIZE) : // WARNING! do not remove
-                                                                          // this casting!
+                    ? (Long) cacheNode.getLong(KEY_EXP_HARD_LIMIT_SIZE)
+                    : // WARNING! do not remove
+                      // this casting!
                     cacheEntry.hardLimitSize();
             Long ttl = cacheNode.containsKey(KEY_EXP_TTL_VALUE) ? cacheNode.getLong(KEY_EXP_TTL_VALUE)
                     : cacheEntry.ttl();
             TimeUnit unit = cacheNode.containsKey(KEY_EXP_TTL_UNIT)
-                    ? TimeUnit.valueOf(cacheNode.getString(KEY_EXP_TTL_UNIT)) : cacheEntry.unit();
+                    ? TimeUnit.valueOf(cacheNode.getString(KEY_EXP_TTL_UNIT))
+                    : cacheEntry.unit();
             EvictionPolicy evictionPolicy = cacheNode.containsKey(KEY_EXP_EVICTION_POLICY)
                     ? EvictionPolicy.valueOf(EvictionPolicy.class, cacheNode.getString(KEY_EXP_EVICTION_POLICY))
                     : cacheEntry.evictionPolicy();
@@ -374,20 +377,17 @@ public class Configuration
                     : entityEntry.type();
 
             Boolean dirtyChecking = entityNode.containsKey(KEY_EXP_DIRTYCHECKING)
-                    ? Boolean.valueOf(entityNode.getString(KEY_EXP_DIRTYCHECKING)) : entityEntry.dirtyChecking();
+                    ? Boolean.valueOf(entityNode.getString(KEY_EXP_DIRTYCHECKING))
+                    : entityEntry.dirtyChecking();
 
             Boolean cacheable = entityNode.containsKey(KEY_EXP_CACHEABLE)
-                    ? Boolean.valueOf(entityNode.getString(KEY_EXP_CACHEABLE)) : entityEntry.cacheable();
+                    ? Boolean.valueOf(entityNode.getString(KEY_EXP_CACHEABLE))
+                    : entityEntry.cacheable();
 
             String cacheId = entityNode.containsKey(KEY_EXP_CACHE_ID) ? entityNode.getString(KEY_EXP_CACHE_ID)
                     : entityEntry.cacheId();
 
-            entityEntry
-                .id(id)
-                .type(type)
-                .dirtyChecking(dirtyChecking)
-                .cacheable(cacheable)
-                .cacheId(cacheId);
+            entityEntry.id(id).type(type).dirtyChecking(dirtyChecking).cacheable(cacheable).cacheId(cacheId);
 
             entities.put(id, entityEntry);
         }
@@ -458,7 +458,8 @@ public class Configuration
                     : providers.containsKey(id) ? providers.get(id) : new ProviderEntry();
 
             String backendName = providerNode.containsKey(KEY_EXP_BACKEND_NAME)
-                    ? providerNode.getString(KEY_EXP_BACKEND_NAME) : providerEntry.backendName();
+                    ? providerNode.getString(KEY_EXP_BACKEND_NAME)
+                    : providerEntry.backendName();
             String type = providerNode.containsKey(KEY_EXP_TYPE) ? providerNode.getString(KEY_EXP_TYPE)
                     : providerEntry.type();
             Boolean readOnly = providerNode.containsKey(KEY_EXP_READ_ONLY)
@@ -512,7 +513,8 @@ public class Configuration
 
             String uri = unitNode.containsKey(KEY_EXP_URI) ? unitNode.getString(KEY_EXP_URI) : unitEntry.uri();
             Boolean defaultUnit = unitNode.containsKey(KEY_EXP_DEFAULT)
-                    ? Boolean.valueOf(unitNode.getString(KEY_EXP_DEFAULT)) : unitEntry.defaultUnit();
+                    ? Boolean.valueOf(unitNode.getString(KEY_EXP_DEFAULT))
+                    : unitEntry.defaultUnit();
             String cacheId = unitNode.containsKey(KEY_EXP_CACHE_ID) ? unitNode.getString(KEY_EXP_CACHE_ID)
                     : unitEntry.cacheId();
 
