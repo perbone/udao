@@ -1741,15 +1741,16 @@ public final class DataManagerImpl implements DataManager
                 try
                 {
                     txnProvider.rollback(txn);
-                    this.txn = null;
-                    txnProvider = null;
-                    transactionInProgress.set(false);
                 }
                 catch (final DataException e)
                 {
                     // Close quietly
                     logger.warn("Unable to rollback the last pending transaction; " + e.getMessage());
                 }
+
+                txn = null;
+                txnProvider = null;
+                transactionInProgress.set(false);
             }
 
             /* Release all active data sources */
