@@ -287,7 +287,7 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
             catch (final Exception e)
             {
                 abortActivation();
-                throw new DataException("Could not initialize all storage units; activation aborted", e);
+                throw new DataException("The underlying provider failed on activate; operation aborted", e);
             }
         }
         else
