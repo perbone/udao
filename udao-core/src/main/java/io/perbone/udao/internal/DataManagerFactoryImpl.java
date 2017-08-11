@@ -135,7 +135,7 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
         configuration.load(path);
 
         /* Validate settings */
-        for (CacheEntry centry : configuration.caches())
+        for (final CacheEntry centry : configuration.caches())
         {
             if (centry.level() < CACHE_LEVEL_MIN || centry.level() > CACHE_LEVEL_MAX)
             {
@@ -207,7 +207,7 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
             /* CACHES initialization */
             try
             {
-                for (CacheEntry centry : configuration.caches())
+                for (final CacheEntry centry : configuration.caches())
                 {
                     if (centry.level() == CACHE_LEVEL_L1)
                     {
@@ -226,6 +226,7 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
             catch (final Exception e)
             {
                 abortActivation();
+
                 throw new DataException("Could not initialize all caches; activation aborted", e);
             }
 
@@ -233,12 +234,13 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
             try
             {
                 /* SCHEMAS initialization */
-                for (SchemaEntry sentry : configuration.schemas())
+                for (final SchemaEntry sentry : configuration.schemas())
                 {
-                    for (EntityEntry eentry : sentry.entities().values())
+                    for (final EntityEntry eentry : sentry.entities().values())
                     {
                         final Object entity = loadType(eentry.type());
                         final String cacheId = parseL1CacheId(entity.getClass(), eentry, sentry, null, null);
+
                         if (cacheId != null)
                             cachePool.attach(entity.getClass(), cacheId);
                     }
@@ -247,40 +249,47 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
             catch (final Exception e)
             {
                 abortActivation();
+
                 throw new DataException("Could not initialize all schemas; activation aborted", e);
             }
 
             /* STORAGE UNITS initialization */
             try
             {
-                for (StorageUnitEntry suentry : configuration.units())
+                for (final StorageUnitEntry suentry : configuration.units())
                 {
                     final Set<DataProvider> unitProviders = units.containsKey(suentry.id()) ? units.get(suentry.id())
                             : new HashSet<DataProvider>();
+
                     /* PROVIDERS initialization */
-                    for (ProviderEntry pentry : suentry.providers().values())
+                    for (final ProviderEntry pentry : suentry.providers().values())
                     {
                         final DataProvider provider = createProvider(pentry);
+
                         injectProperties(provider, pentry.properties());
+
                         provider.setReadOnly(pentry.readOnly());
                         provider.activate();
 
                         unitProviders.add(provider);
 
                         /* Cache id override */
-                        for (SchemaEntry sentry : suentry.schemas().values())
+                        for (final SchemaEntry sentry : suentry.schemas().values())
                         {
-                            for (EntityEntry eentry : sentry.entities().values())
+                            for (final EntityEntry eentry : sentry.entities().values())
                             {
                                 final Object entity = loadType(eentry.type());
                                 final String cacheId = parseL1CacheId(entity.getClass(), eentry, sentry, suentry,
                                         pentry);
+
                                 if (cacheId != null)
                                     cachePool.attach(entity.getClass(), cacheId);
                             }
                         }
                     }
+
                     units.put(suentry.id().toLowerCase(), unitProviders);
+
                     if (suentry.defaultUnit()) // Put again with the alias 'default'
                         units.put(DEFAULT_STORAGE_UNIT_KEY, unitProviders);
                 }
@@ -316,9 +325,9 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
         {
             try
             {
-                for (Set<DataProvider> providers : units.values())
+                for (final Set<DataProvider> providers : units.values())
                 {
-                    for (DataProvider provider : providers)
+                    for (final DataProvider provider : providers)
                     {
                         if (provider.isActive())
                         {
@@ -451,7 +460,8 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
 
         try
         {
-            Class<?> clazz = Class.forName(name);
+            final Class<?> clazz = Class.forName(name);
+
             instance = clazz.newInstance();
         }
         catch (final ClassNotFoundException e)
@@ -495,9 +505,9 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
     {
         try
         {
-            for (Set<DataProvider> providers : units.values())
+            for (final Set<DataProvider> providers : units.values())
             {
-                for (DataProvider provider : providers)
+                for (final DataProvider provider : providers)
                 {
                     if (provider.isActive())
                     {
