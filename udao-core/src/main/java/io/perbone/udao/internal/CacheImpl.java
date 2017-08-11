@@ -146,11 +146,12 @@ final class CacheImpl implements Cache
         }
         else if (!(akeys = EntityUtils.alternateKeyHashes(bean)).isEmpty())
         {
-            for (String akey : akeys)
+            for (final String akey : akeys)
             {
                 if (cache.contains(akey))
                     return true;
             }
+
             return false;
         }
         else
@@ -197,7 +198,7 @@ final class CacheImpl implements Cache
             cache.remove(skey);
         if (pkey != null)
             cache.remove(pkey);
-        for (String akey : akeys)
+        for (final String akey : akeys)
             cache.remove(akey);
     }
 
