@@ -43,6 +43,7 @@ final class CachePool
 
     public CachePool()
     {
+        // do nothing
     }
 
     /**
@@ -61,7 +62,7 @@ final class CachePool
         if (caches.containsKey(centry.id()))
             return;
 
-        io.perbone.mkey.Cache cache = CacheBuilder
+        final io.perbone.mkey.Cache cache = CacheBuilder
                 .newInstance()
                 .hardLimitSize(centry.hardLimitSize())
                 .garbagePolicy(GarbagePolicy.TIME_TO_LIVE)
@@ -109,7 +110,7 @@ final class CachePool
     {
         checkOpen();
 
-        String cacheId = types.get(type);
+        final String cacheId = types.get(type);
 
         if (cacheId == null)
             return new NoCacheImpl();
@@ -132,24 +133,11 @@ final class CachePool
         return get(bean.getClass());
     }
 
-    // /**
-    // * Invalidates all caches.
-    // *
-    // * @deprecated
-    // */
-    // public void invalidateAll()
-    // {
-    // checkOpen();
-    //
-    // for (io.perbone.mkey.Cache cache : caches.values())
-    // cache.clear();
-    // }
-
     public void close() throws IllegalStateException
     {
         if (open.compareAndSet(true, false))
         {
-            for (io.perbone.mkey.Cache cache : caches.values())
+            for (final io.perbone.mkey.Cache cache : caches.values())
                 cache.clear();
 
             types.clear();
