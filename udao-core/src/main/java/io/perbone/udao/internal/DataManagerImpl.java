@@ -194,7 +194,7 @@ public final class DataManagerImpl implements DataManager
 
         List<T> result;
 
-        Class<?> type = beans.get(0).getClass();
+        final Class<?> type = beans.get(0).getClass();
 
         for (T bean : beans)
             enforceAnnotationsOnCreation(bean);
@@ -227,7 +227,7 @@ public final class DataManagerImpl implements DataManager
 
         List<T> result;
 
-        Class<?> type = beans.get(0).getClass();
+        final Class<?> type = beans.get(0).getClass();
 
         for (T bean : beans)
             enforceAnnotationsOnCreation(bean);
@@ -322,7 +322,7 @@ public final class DataManagerImpl implements DataManager
 
         List<T> result;
 
-        Class<?> type = beans.get(0).getClass();
+        final Class<?> type = beans.get(0).getClass();
 
         for (T bean : beans)
             enforceAnnotationsOnCreation(bean);
@@ -356,7 +356,7 @@ public final class DataManagerImpl implements DataManager
 
         List<T> result;
 
-        Class<?> type = beans.get(0).getClass();
+        final Class<?> type = beans.get(0).getClass();
 
         for (T bean : beans)
             enforceAnnotationsOnCreation(bean);
@@ -1635,7 +1635,7 @@ public final class DataManagerImpl implements DataManager
         {
             try
             {
-                String id = IdFactory.uuid();
+                final String id = IdFactory.uuid();
 
                 txnProvider = getProvider(true);
                 txn = txnProvider.begin(id);
@@ -1824,6 +1824,7 @@ public final class DataManagerImpl implements DataManager
         for (Object bean : beans)
         {
             checkManagedType(bean.getClass());
+
             if (!type.equals(bean.getClass()))
                 throw new IllegalArgumentException("All example samples have to be the same type");
 
@@ -1953,7 +1954,7 @@ public final class DataManagerImpl implements DataManager
         if (!AnnotationScanner.isAnnotationPresent(type, SurrogateKey.class))
             throw new IllegalArgumentException("Surrogate key annotation is not present");
 
-        for (Object id : ids)
+        for (final Object id : ids)
         {
             if (id == null)
                 throw new IllegalArgumentException("Surrogate key identifier cannot be null");
@@ -1977,7 +1978,8 @@ public final class DataManagerImpl implements DataManager
         /**
          * Surrogate key generation (when the field value is null). Supports only String and Long.
          */
-        ElementInfo einfo = sinfo.surrogateKey();
+        final ElementInfo einfo = sinfo.surrogateKey();
+
         if (einfo != null && EntityUtils.value(bean, einfo.name()) == null)
         {
             if (einfo.dataType() == DataType.STRING)
@@ -2000,12 +2002,12 @@ public final class DataManagerImpl implements DataManager
         /**
          * Meta-data info.
          */
-        for (Field field : AnnotationScanner.scanFields(type, Metadata.class))
+        for (final Field field : AnnotationScanner.scanFields(type, Metadata.class))
         {
-            Class<?> ftype = field.getType();
-            Object value = EntityUtils.value(bean, field.getName());
+            final Class<?> ftype = field.getType();
+            final Object value = EntityUtils.value(bean, field.getName());
 
-            Metadata.MetadataType mtype = field.getAnnotation(Metadata.class).value();
+            final Metadata.MetadataType mtype = field.getAnnotation(Metadata.class).value();
 
             /* CREATION_DATE */
             if (mtype == MetadataType.CREATED_DATE && value == null)
@@ -2066,11 +2068,11 @@ public final class DataManagerImpl implements DataManager
         /**
          * Meta-data info.
          */
-        for (Field field : AnnotationScanner.scanFields(type, Metadata.class))
+        for (final Field field : AnnotationScanner.scanFields(type, Metadata.class))
         {
-            Class<?> ftype = field.getType();
+            final Class<?> ftype = field.getType();
 
-            Metadata.MetadataType mtype = field.getAnnotation(Metadata.class).value();
+            final Metadata.MetadataType mtype = field.getAnnotation(Metadata.class).value();
 
             /* LAST_ACCESS_DATE */
             if (mtype == MetadataType.LAST_ACCESS_DATE)
@@ -2108,11 +2110,11 @@ public final class DataManagerImpl implements DataManager
         /**
          * Meta-data info.
          */
-        for (Field field : AnnotationScanner.scanFields(type, Metadata.class))
+        for (final Field field : AnnotationScanner.scanFields(type, Metadata.class))
         {
-            Class<?> ftype = field.getType();
+            final Class<?> ftype = field.getType();
 
-            Metadata.MetadataType mtype = field.getAnnotation(Metadata.class).value();
+            final Metadata.MetadataType mtype = field.getAnnotation(Metadata.class).value();
 
             /* LAST_ACCESS_DATE */
             if (mtype == MetadataType.LAST_ACCESS_DATE)
@@ -2155,17 +2157,19 @@ public final class DataManagerImpl implements DataManager
             {
                 checkSupportedTypes(field, mtype, Date.class, Long.class);
 
-                Long ttl = EntityUtils.timeToLive(bean);
+                final Long ttl = EntityUtils.timeToLive(bean);
+
                 if (ttl != null)
                 {
                     TimeUnit unit = TimeUnit.MILLISECONDS; // Defaults to MILLISECONDS
+
                     if (EntityUtils.hasTimeToLiveUnit(bean))
                     {
                         TimeUnit tmp = EntityUtils.timeToLiveUnit(bean);
                         unit = tmp == null ? unit : tmp;
                     }
 
-                    long expires = now + TimeUnit.MILLISECONDS.convert(ttl, unit);
+                    final long expires = now + TimeUnit.MILLISECONDS.convert(ttl, unit);
 
                     if (ftype.equals(Date.class))
                         EntityUtils.value(bean, field.getName(), new Date(expires));
@@ -2198,6 +2202,7 @@ public final class DataManagerImpl implements DataManager
         {
             if (field.getType().equals(type))
                 return;
+
             names = (names == null ? type.getName() : names + ", " + type.getName());
         }
 
@@ -2268,7 +2273,7 @@ public final class DataManagerImpl implements DataManager
         if (provider == null) // Can happen due high concurrency (but should not!)
             provider = getProvider(readWrite);
 
-        DataSource ds = provider.openDataSource(type);
+        final DataSource ds = provider.openDataSource(type);
 
         activeDataSources.add(ds);
 
@@ -2284,6 +2289,7 @@ public final class DataManagerImpl implements DataManager
     private void closeDataSource(final DataSource ds)
     {
         activeDataSources.remove(ds);
+
         ds.close();
     }
 
