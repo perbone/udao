@@ -95,7 +95,7 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
             final URL defaultSettings = cl.getResource(DEFAULT_SETTINGNS_URI);
             if (defaultSettings != null)
             {
-                String localSettingsUrl = defaultSettings.toExternalForm();
+                final String localSettingsUrl = defaultSettings.toExternalForm();
 
                 /* First we load all but the local settings */
                 final Enumeration<URL> resources = cl.getResources(DEFAULT_SETTINGNS_URI);
@@ -178,7 +178,7 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
         if (!units.containsKey(key))
             throw new IllegalStateException("Storage unit id does not match any provider");
 
-        Set<DataProvider> providers = units.get(key);
+        final Set<DataProvider> providers = units.get(key);
 
         return new DataManagerImpl(providers, cachePool);
     }
@@ -272,8 +272,9 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
                         {
                             for (EntityEntry eentry : sentry.entities().values())
                             {
-                                Object entity = loadType(eentry.type());
-                                String cacheId = parseL1CacheId(entity.getClass(), eentry, sentry, suentry, pentry);
+                                final Object entity = loadType(eentry.type());
+                                final String cacheId = parseL1CacheId(entity.getClass(), eentry, sentry, suentry,
+                                        pentry);
                                 if (cacheId != null)
                                     cachePool.attach(entity.getClass(), cacheId);
                             }
@@ -287,6 +288,7 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
             catch (final Exception e)
             {
                 abortActivation();
+
                 throw new DataException("The underlying provider failed on activate; operation aborted", e);
             }
         }
@@ -481,6 +483,7 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
             throws IllegalArgumentException, DataException
     {
         final Settings settings = new Settings();
+
         settings.load(props);
         settings.inject(injectee);
     }
@@ -502,6 +505,7 @@ public final class DataManagerFactoryImpl implements DataManagerFactory<DataMana
                     }
                 }
             }
+
             cachePool.close();
             active.set(false);
         }
