@@ -34,7 +34,11 @@ import io.perbone.udao.DataException;
  * Simple concrete {@link Cursor} implementation that uses an immutable array as its backing store.
  * It's scrollable, indexable and countable.
  * <p>
- * For performance reasons this class is not thread safe.
+ * For performance reasons this class is not thread safe although it has a immutable iterator.
+ * <p>
+ * Again for performance reasons this implementation uses a singleton (and immutable) iterator to
+ * keep garbage at a minimum. So the use of the iterator have to be synchronized between all
+ * contender threads.
  * 
  * @author Paulo Perbone <pauloperbone@yahoo.com>
  * @since 0.1.0
@@ -54,6 +58,8 @@ public class SimpleCursor<T> implements Cursor<T>
     private final int size;
 
     private int currentPos = INVALID_POSITION;
+
+    final CursorIterator it = new CursorIterator();
 
     /**
      * Creates a concrete {@link Cursor} object.
@@ -228,7 +234,7 @@ public class SimpleCursor<T> implements Cursor<T>
     {
         checkOpen();
 
-        return new CursorIterator();
+        return it;
     }
 
     @Override
