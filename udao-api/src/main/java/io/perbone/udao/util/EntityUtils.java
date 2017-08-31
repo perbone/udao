@@ -943,7 +943,7 @@ public final class EntityUtils
 
         T clone = newInstance(bean);
 
-        copy(bean, clone);
+        copy(bean, clone, true);
 
         return clone;
     }
