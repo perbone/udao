@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -101,7 +101,7 @@ public final class EntityUtils
         {
             hostName = InetAddress.getLocalHost().getHostName();
         }
-        catch (UnknownHostException e)
+        catch (final UnknownHostException e)
         {
             hostName = "host name is unknown";
         }
@@ -143,7 +143,7 @@ public final class EntityUtils
         {
             checkStorable(type);
         }
-        catch (IllegalArgumentException e)
+        catch (final IllegalArgumentException e)
         {
             return false;
         }
@@ -162,9 +162,10 @@ public final class EntityUtils
      * @throws IllegalArgumentException
      *             When the type is not an valid {@link Storable} class
      */
-    // TODO implement this method
     public static Map<String, Set<Pair<String, String>>> aliases(final Class<?> type) throws IllegalArgumentException
     {
+        // TODO implement this method
+
         return Collections.emptyMap();
     }
 
@@ -181,10 +182,11 @@ public final class EntityUtils
      * @throws IllegalArgumentException
      *             When the type is not an valid {@link Storable} class
      */
-    // TODO implement this method
     public static Map<String, Set<Pair<String, String>>> aliases(final Class<?> type, final String target)
             throws IllegalArgumentException
     {
+        // TODO implement this method
+
         return Collections.emptyMap();
     }
 
@@ -199,9 +201,10 @@ public final class EntityUtils
      * @throws IllegalArgumentException
      *             When the type is not an valid {@link Storable} class
      */
-    // TODO implement this method
     public static Set<String> elements(final Class<?> type) throws IllegalArgumentException
     {
+        // TODO implement this method
+
         return Collections.emptySet();
     }
 
@@ -226,27 +229,27 @@ public final class EntityUtils
         {
             sinfo = new StorableInfo();
 
-            Storable storable = AnnotationScanner.getAnnotation(type, Storable.class);
+            final Storable storable = AnnotationScanner.getAnnotation(type, Storable.class);
 
-            String name = StringValidations.isValid(storable.name()) ? storable.name() : className(type);
+            final String name = StringValidations.isValid(storable.name()) ? storable.name() : className(type);
 
-            Map<String, List<String>> aliases = parseAliases(storable.aliases());
+            final Map<String, List<String>> aliases = parseAliases(storable.aliases());
 
-            String schema = StringValidations.isValid(storable.schema()) ? storable.schema() : null;
+            final String schema = StringValidations.isValid(storable.schema()) ? storable.schema() : null;
 
-            ConsistencyLevel consistencyLevel = storable.consistencyLevel();
+            final ConsistencyLevel consistencyLevel = storable.consistencyLevel();
 
-            ElementInfo surrogateKey = parseSurrogateKey(type);
+            final ElementInfo surrogateKey = parseSurrogateKey(type);
 
-            List<ElementInfo> primaryKey = parsePrimaryKey(type);
+            final List<ElementInfo> primaryKey = parsePrimaryKey(type);
 
-            Map<String, List<ElementInfo>> alternateKeys = parseAlternateKeys(type);
+            final Map<String, List<ElementInfo>> alternateKeys = parseAlternateKeys(type);
 
-            List<ElementInfo> elements = parseElements(type);
+            final List<ElementInfo> elements = parseElements(type);
 
-            List<ElementInfo> nonVirtualElements = new ArrayList<ElementInfo>();
+            final List<ElementInfo> nonVirtualElements = new ArrayList<>();
 
-            for (ElementInfo einfo : elements)
+            for (final ElementInfo einfo : elements)
             {
                 if (!einfo.virtual())
                     nonVirtualElements.add(einfo);
@@ -299,13 +302,13 @@ public final class EntityUtils
         if (!StringValidations.isValid(name))
             throw new IllegalArgumentException("Name is invalid");
 
-        for (ElementInfo einfo : info(type).elements())
+        for (final ElementInfo einfo : info(type).elements())
         {
             if (einfo.name().equalsIgnoreCase(name))
                 return einfo;
 
-            for (List<String> aliases : einfo.aliases().values())
-                for (String alias : aliases)
+            for (final List<String> aliases : einfo.aliases().values())
+                for (final String alias : aliases)
                     if (alias.equalsIgnoreCase(name))
                         return einfo;
         }
@@ -334,7 +337,7 @@ public final class EntityUtils
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
 
-        Class<?> type = bean.getClass();
+        final Class<?> type = bean.getClass();
 
         checkStorable(type);
 
@@ -345,13 +348,13 @@ public final class EntityUtils
 
         try
         {
-            Field field = matchField(type, name);
+            final Field field = matchField(type, name);
             if (field == null)
                 throw new IllegalArgumentException(String.format("Bean does not have such element [%s]", name));
             field.setAccessible(true);
             result = (T) field.get(bean);
         }
-        catch (IllegalAccessException e)
+        catch (final IllegalAccessException e)
         {
             throw new IllegalArgumentException(String.format("Cannot set the value for element [%s]", name));
         }
@@ -379,21 +382,21 @@ public final class EntityUtils
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
 
-        Class<?> type = bean.getClass();
+        final Class<?> type = bean.getClass();
 
         checkStorable(type);
 
         if (!StringValidations.isValid(name))
             throw new IllegalArgumentException("Name is invalid");
 
-        Field field = matchField(type, name);
+        final Field field = matchField(type, name);
         if (field == null)
             throw new IllegalArgumentException(String.format("Bean does not have such element [%s]", name));
 
         try
         {
             field.setAccessible(true);
-            DataType dt = parseDataType(field.getType(), field.getAnnotation(Element.class));
+            final DataType dt = parseDataType(field.getType(), field.getAnnotation(Element.class));
             switch (dt)
             {
             // FIXME the field type may or may not match the DataType
@@ -446,7 +449,7 @@ public final class EntityUtils
                 field.set(bean, value);
             }
         }
-        catch (IllegalArgumentException | IllegalAccessException e)
+        catch (final IllegalArgumentException | IllegalAccessException e)
         {
             throw new IllegalArgumentException(String.format("Cannot set the value for element [%s]", name));
         }
@@ -468,16 +471,16 @@ public final class EntityUtils
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
 
-        Class<?> type = bean.getClass();
+        final Class<?> type = bean.getClass();
 
         checkStorable(type);
 
-        Map<String, Object> result = new Hashtable<String, Object>();
+        final Map<String, Object> result = new HashMap<>();
 
-        for (ElementInfo einfo : info(type).elements())
+        for (final ElementInfo einfo : info(type).elements())
         {
-            String name = einfo.name();
-            Object value = value(bean, name);
+            final String name = einfo.name();
+            final Object value = value(bean, name);
             if (value != null)
                 result.put(name, value);
         }
@@ -496,14 +499,14 @@ public final class EntityUtils
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
 
-        Class<?> type = bean.getClass();
+        final Class<?> type = bean.getClass();
 
         checkStorable(type);
 
         if (info(type).surrogateKey() == null)
             return null;
 
-        Object id = value(bean, info(type).surrogateKey().name());
+        final Object id = value(bean, info(type).surrogateKey().name());
 
         return id;
     }
@@ -575,7 +578,7 @@ public final class EntityUtils
         if (id == null)
             throw new IllegalArgumentException("Invalid surrogate key value");
 
-        Object[] values = new Object[2];
+        final Object[] values = new Object[2];
 
         values[0] = info(type).name();
         values[1] = id;
@@ -594,18 +597,18 @@ public final class EntityUtils
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
 
-        Class<?> type = bean.getClass();
+        final Class<?> type = bean.getClass();
 
         checkStorable(type);
 
         if (info(type).primaryKey().isEmpty())
             throw new IllegalArgumentException("PrimaryKey annotation is empty");
 
-        Object[] values = new Object[info(type).primaryKey().size()];
+        final Object[] values = new Object[info(type).primaryKey().size()];
 
         int i = 0;
 
-        for (ElementInfo einfo : info(type).primaryKey())
+        for (final ElementInfo einfo : info(type).primaryKey())
         {
             values[i++] = value(bean, einfo.name());
         }
@@ -629,20 +632,20 @@ public final class EntityUtils
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
 
-        Class<?> type = bean.getClass();
+        final Class<?> type = bean.getClass();
 
         checkStorable(type);
 
         if (info(type).primaryKey().isEmpty())
             return null;
 
-        Object[] values = new Object[info(type).primaryKey().size() + 1];
+        final Object[] values = new Object[info(type).primaryKey().size() + 1];
 
         values[0] = info(type).name();
 
         int i = 0;
 
-        for (ElementInfo einfo : info(type).primaryKey())
+        for (final ElementInfo einfo : info(type).primaryKey())
             values[++i] = value(bean, einfo.name());
 
         return createKey(values);
@@ -672,9 +675,10 @@ public final class EntityUtils
         if (keys.length != info(type).primaryKey().size())
             throw new IllegalArgumentException("Invalid primary key values");
 
-        Object[] values = new Object[keys.length + 1];
+        final Object[] values = new Object[keys.length + 1];
 
         values[0] = info(type).name();
+
         System.arraycopy(keys, 0, values, 1, keys.length);
 
         return createKey(values);
@@ -697,23 +701,23 @@ public final class EntityUtils
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
 
-        Class<?> type = bean.getClass();
+        final Class<?> type = bean.getClass();
 
         checkStorable(type);
 
-        List<String> hashes = new ArrayList<String>();
+        final List<String> hashes = new ArrayList<>();
 
         if (info(type).alternateKeys().isEmpty())
             return hashes;
 
-        for (String name : info(type).alternateKeys().keySet())
+        for (final String name : info(type).alternateKeys().keySet())
         {
-            List<ElementInfo> elements = info(type).alternateKeys().get(name);
-            List<Object> values = new ArrayList<Object>();
+            final List<ElementInfo> elements = info(type).alternateKeys().get(name);
+            final List<Object> values = new ArrayList<>();
 
-            for (ElementInfo einfo : elements)
+            for (final ElementInfo einfo : elements)
             {
-                Object value = value(bean, einfo.name());
+                final Object value = value(bean, einfo.name());
                 if (value == null)
                     continue;
                 values.add(value);
@@ -753,10 +757,11 @@ public final class EntityUtils
         if (info(type).alternateKey(name).isEmpty())
             throw new IllegalArgumentException("Invalid alternate key name");
 
-        Object[] values = new Object[keys.length + 2];
+        final Object[] values = new Object[keys.length + 2];
 
         values[0] = info(type).name();
         values[1] = name;
+
         System.arraycopy(keys, 0, values, 2, keys.length);
 
         return createKey(values);
@@ -773,18 +778,18 @@ public final class EntityUtils
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
 
-        Class<?> type = bean.getClass();
+        final Class<?> type = bean.getClass();
 
         checkStorable(type);
 
         if (info(type).primaryKey().isEmpty())
             throw new IllegalArgumentException("PrimaryKey annotation is empty");
 
-        Object[] values = new Object[info(type).primaryKey().size()];
+        final Object[] values = new Object[info(type).primaryKey().size()];
 
         int i = 0;
 
-        for (ElementInfo einfo : info(type).primaryKey())
+        for (final ElementInfo einfo : info(type).primaryKey())
         {
             values[i++] = value(bean, einfo.name());
         }
@@ -868,6 +873,57 @@ public final class EntityUtils
     }
 
     /**
+     * Deep copy the values from source to target overriding any existing values.
+     * 
+     * @param source
+     *            the bean to copy the values from
+     * @param target
+     *            the bean to copy the values to
+     */
+    public static <T> void copy(final T source, final T target)
+    {
+        copy(source, target, true);
+    }
+
+    /**
+     * Deep copy the values from source to target.
+     * 
+     * @param source
+     *            the bean to copy the values from
+     * @param target
+     *            the bean to copy the values to
+     * @param override
+     *            controls if there should be overriding of any existing values
+     */
+    public static <T> void copy(final T source, final T target, final boolean override)
+    {
+        final Map<String, Object> values = values(source);
+
+        if (override)
+        {
+            for (final String name : values.keySet())
+            {
+                value(target, name, values.get(name));
+            }
+        }
+        else
+        {
+            final Map<String, Object> tvalues = values(target);
+
+            for (final String name : values.keySet())
+            {
+                if (tvalues.containsKey(name))
+                {
+                    // keeps the value from target (no override)
+                    continue;
+                }
+
+                value(target, name, values.get(name));
+            }
+        }
+    }
+
+    /**
      * Deep copy a bean object.
      * 
      * @param bean
@@ -887,12 +943,7 @@ public final class EntityUtils
 
         T clone = newInstance(bean);
 
-        Map<String, Object> values = values(bean);
-
-        for (String name : values.keySet())
-        {
-            value(clone, name, values.get(name));
-        }
+        copy(bean, clone);
 
         return clone;
     }
@@ -915,7 +966,7 @@ public final class EntityUtils
         if (ttlFields.containsKey(type))
             return true;
 
-        for (Field field : AnnotationScanner.scanFields(type, TimeToLive.class))
+        for (final Field field : AnnotationScanner.scanFields(type, TimeToLive.class))
         {
             if (!field.getAnnotation(TimeToLive.class).unit())
             {
@@ -924,7 +975,7 @@ public final class EntityUtils
             }
         }
 
-        for (Field field : AnnotationScanner.scanFields(type, Metadata.class))
+        for (final Field field : AnnotationScanner.scanFields(type, Metadata.class))
         {
             if (field.getAnnotation(Metadata.class).value() == Metadata.MetadataType.TIME_TO_LIVE)
             {
@@ -952,9 +1003,10 @@ public final class EntityUtils
 
         try
         {
-            Field field = ttlFields.get(bean.getClass()); // Should never fail
+            final Field field = ttlFields.get(bean.getClass()); // Should never fail
             field.setAccessible(true);
-            Object value = field.get(bean);
+            final Object value = field.get(bean);
+
             return NumberFormatter.asLong(value);
         }
         catch (IllegalAccessException e)
@@ -981,7 +1033,7 @@ public final class EntityUtils
         if (ttlUnitFields.containsKey(type))
             return true;
 
-        for (Field field : AnnotationScanner.scanFields(type, TimeToLive.class))
+        for (final Field field : AnnotationScanner.scanFields(type, TimeToLive.class))
         {
             if (field.getAnnotation(TimeToLive.class).unit())
             {
@@ -1009,15 +1061,15 @@ public final class EntityUtils
 
         try
         {
-            Field field = ttlUnitFields.get(bean.getClass()); // Should never fail
+            final Field field = ttlUnitFields.get(bean.getClass()); // Should never fail
             field.setAccessible(true);
-            Object value = field.get(bean);
+            final Object value = field.get(bean);
             if (value instanceof TimeUnit)
                 return (TimeUnit) value;
             else if (value instanceof String)
                 return parseTimeUnit((String) value);
         }
-        catch (IllegalAccessException e)
+        catch (final IllegalAccessException e)
         {
             throw new IllegalArgumentException(String.format("Cannot set ttl to bean"));
         }
@@ -1034,11 +1086,7 @@ public final class EntityUtils
         {
             instance = (T) bean.getClass().newInstance();
         }
-        catch (InstantiationException e)
-        {
-            // do nothing
-        }
-        catch (IllegalAccessException e)
+        catch (final InstantiationException | IllegalAccessException e)
         {
             // do nothing
         }
@@ -1096,12 +1144,12 @@ public final class EntityUtils
      */
     private static Field matchField(final Class<?> type, final String elementName)
     {
-        String key = type.getName() + elementName;
+        final String key = type.getName() + elementName;
 
         if (fieldsCache.containsKey(key))
             return fieldsCache.get(key);
 
-        for (Field field : AnnotationScanner.scanFields(type, Element.class))
+        for (final Field field : AnnotationScanner.scanFields(type, Element.class))
         {
             if (elementName.equals(field.getAnnotation(Element.class).name())
                     || elementName.equalsIgnoreCase(field.getName()))
@@ -1111,9 +1159,9 @@ public final class EntityUtils
             }
             else if (field.isAnnotationPresent(Aliases.class))
             {
-                for (Alias alias : field.getAnnotation(Aliases.class).value())
+                for (final Alias alias : field.getAnnotation(Aliases.class).value())
                 {
-                    for (String aliasName : alias.names())
+                    for (final String aliasName : alias.names())
                     {
                         if (elementName.equalsIgnoreCase(aliasName))
                         {
@@ -1125,7 +1173,7 @@ public final class EntityUtils
             }
             else if (field.isAnnotationPresent(Alias.class))
             {
-                for (String aliasName : field.getAnnotation(Alias.class).names())
+                for (final String aliasName : field.getAnnotation(Alias.class).names())
                 {
                     if (elementName.equalsIgnoreCase(aliasName))
                     {
@@ -1149,14 +1197,14 @@ public final class EntityUtils
      */
     private static Map<String, List<String>> parseAliases(final Alias[] aliases)
     {
-        Map<String, List<String>> parsedAliases = new ConcurrentHashMap<String, List<String>>();
+        final Map<String, List<String>> parsedAliases = new ConcurrentHashMap<String, List<String>>();
 
-        for (Alias alias : aliases)
+        for (final Alias alias : aliases)
         {
-            List<String> names = parsedAliases.containsKey(alias.target()) ? parsedAliases.get(alias.target())
+            final List<String> names = parsedAliases.containsKey(alias.target()) ? parsedAliases.get(alias.target())
                     : new CopyOnWriteArrayList<String>();
 
-            for (String name : alias.names())
+            for (final String name : alias.names())
             {
                 names.add(name);
             }
@@ -1177,28 +1225,28 @@ public final class EntityUtils
      */
     private static List<ElementInfo> parseElements(final Class<?> type)
     {
-        List<ElementInfo> elements = new ArrayList<ElementInfo>();
+        final List<ElementInfo> elements = new ArrayList<ElementInfo>();
 
-        for (Field field : AnnotationScanner.scanFields(type, Element.class))
+        for (final Field field : AnnotationScanner.scanFields(type, Element.class))
         {
-            Element element = field.getAnnotation(Element.class);
+            final Element element = field.getAnnotation(Element.class);
 
-            String name = StringValidations.isValid(element.name()) ? element.name() : field.getName();
+            final String name = StringValidations.isValid(element.name()) ? element.name() : field.getName();
 
-            DataType dataType = parseDataType(field.getType(), element);
+            final DataType dataType = parseDataType(field.getType(), element);
 
-            InstanceType instanceType = element.instanceType();
+            final InstanceType instanceType = element.instanceType();
 
-            Map<String, List<String>> aliases = field.isAnnotationPresent(Aliases.class)
+            final Map<String, List<String>> aliases = field.isAnnotationPresent(Aliases.class)
                     ? parseAliases(field.getAnnotation(Aliases.class).value())
                     : new ConcurrentHashMap<String, List<String>>();
-            Alias alias = field.getAnnotation(Alias.class);
+            final Alias alias = field.getAnnotation(Alias.class);
             if (alias != null)
             {
-                List<String> names = aliases.containsKey(alias.target()) ? aliases.get(alias.target())
+                final List<String> names = aliases.containsKey(alias.target()) ? aliases.get(alias.target())
                         : new CopyOnWriteArrayList<String>();
 
-                for (String n : alias.names())
+                for (final String n : alias.names())
                 {
                     names.add(n);
                 }
@@ -1206,11 +1254,11 @@ public final class EntityUtils
                 aliases.put(alias.target(), names);
             }
 
-            Boolean virtual = field.isAnnotationPresent(Virtual.class);
+            final Boolean virtual = field.isAnnotationPresent(Virtual.class);
 
-            Boolean metadata = field.isAnnotationPresent(Metadata.class);
+            final Boolean metadata = field.isAnnotationPresent(Metadata.class);
 
-            ElementInfo einfo = new ElementInfo()
+            final ElementInfo einfo = new ElementInfo()
                     .type(field.getType())
                     .name(name)
                     .dataType(dataType)
@@ -1280,10 +1328,10 @@ public final class EntityUtils
      */
     private static List<ElementInfo> parseElementByNames(final Class<?> type, final String... names)
     {
-        List<String> nameList = Arrays.asList(names);
-        List<ElementInfo> elements = parseElements(type);
+        final List<String> nameList = Arrays.asList(names);
+        final List<ElementInfo> elements = parseElements(type);
 
-        for (Iterator<ElementInfo> i = elements.iterator(); i.hasNext();)
+        for (final Iterator<ElementInfo> i = elements.iterator(); i.hasNext();)
         {
             // FIXME support alias names
             if (!nameList.contains(i.next().name()))
@@ -1318,11 +1366,11 @@ public final class EntityUtils
     {
         if (!AnnotationScanner.isAnnotationPresent(type, AlternateKeys.class)
                 && !AnnotationScanner.isAnnotationPresent(type, AlternateKey.class))
-            return new ConcurrentHashMap<String, List<ElementInfo>>();
+            return new ConcurrentHashMap<>();
 
-        ConcurrentHashMap<String, List<ElementInfo>> result = new ConcurrentHashMap<String, List<ElementInfo>>();
+        final ConcurrentHashMap<String, List<ElementInfo>> result = new ConcurrentHashMap<>();
 
-        List<AlternateKey> annotations = new ArrayList<AlternateKey>();
+        final List<AlternateKey> annotations = new ArrayList<>();
 
         if (AnnotationScanner.isAnnotationPresent(type, AlternateKeys.class))
             for (AlternateKey a : AnnotationScanner.getAnnotation(type, AlternateKeys.class).value())
@@ -1331,7 +1379,7 @@ public final class EntityUtils
         if (AnnotationScanner.isAnnotationPresent(type, AlternateKey.class))
             annotations.add(AnnotationScanner.getAnnotation(type, AlternateKey.class));
 
-        for (AlternateKey a : annotations)
+        for (final AlternateKey a : annotations)
             result.put(a.name(), parseElementByNames(type, a.value()));
 
         return result;
@@ -1347,9 +1395,9 @@ public final class EntityUtils
         if (!AnnotationScanner.isAnnotationPresent(type, SurrogateKey.class))
             return null;
 
-        String idName = AnnotationScanner.getAnnotation(type, SurrogateKey.class).value();
+        final String idName = AnnotationScanner.getAnnotation(type, SurrogateKey.class).value();
 
-        for (ElementInfo einfo : parseElements(type))
+        for (final ElementInfo einfo : parseElements(type))
         {
             if (einfo.name().equalsIgnoreCase(idName))
                 return einfo;
@@ -1374,9 +1422,11 @@ public final class EntityUtils
      */
     private static String createKey(final Object... values) throws IllegalStateException, IllegalArgumentException
     {
-        for (Object v : values)
+        for (final Object v : values)
+        {
             if (v == null)
                 throw new IllegalArgumentException("Cannot create key: value is null");
+        }
 
         String result = null;
 
@@ -1386,14 +1436,14 @@ public final class EntityUtils
         {
             final StringBuilder buffer = new StringBuilder();
 
-            for (Object v : values)
+            for (final Object v : values)
                 buffer.append(v.toString()).append(':');
 
             final byte[] hash = digest.digest(buffer.toString().getBytes(KEY_ENCONDING));
 
             result = HexFormatter.encode(hash);
         }
-        catch (UnsupportedEncodingException e)
+        catch (final UnsupportedEncodingException e)
         {
             throw new IllegalArgumentException("Cannot create key: unsupported encode", e);
         }
@@ -1411,14 +1461,14 @@ public final class EntityUtils
      */
     private static MessageDigest getMessageDigestInstance()
     {
-        MessageDigest result = messageDigestCache.getAndSet(null);
+        final MessageDigest result = messageDigestCache.getAndSet(null);
         if (result == null)
         {
             try
             {
                 return MessageDigest.getInstance(KEY_DIGEST_ALGORITHM);
             }
-            catch (NoSuchAlgorithmException e)
+            catch (final NoSuchAlgorithmException e)
             {
                 return null;
             }
