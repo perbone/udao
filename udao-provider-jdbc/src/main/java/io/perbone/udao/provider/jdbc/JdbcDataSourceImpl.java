@@ -121,7 +121,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         if (cache.contains(bean))
             throw new KeyViolationException(MESSAGE_KEY_VIOLATION);
 
-        final Class<?> type = bean.getClass();
+        final Class<T> type = (Class<T>) bean.getClass();
 
         final StorableInfo sinfo = EntityUtils.info(type);
 
@@ -751,7 +751,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        final Class<?> type = bean.getClass();
+        final Class<T> type = (Class<T>) bean.getClass();
 
         final StorableInfo sinfo = EntityUtils.info(type);
 
@@ -889,7 +889,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        final Class<?> type = bean.getClass();
+        final Class<T> type = (Class<T>) bean.getClass();
 
         final StorableInfo sinfo = EntityUtils.info(type);
 
