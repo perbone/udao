@@ -773,7 +773,7 @@ public final class EntityUtils
      * @return
      * @throws IllegalArgumentException
      */
-    public static Object[] alternateKeys(final Object bean) throws IllegalArgumentException
+    public static Map<String, Object[]> alternateKeys(final Object bean) throws IllegalArgumentException
     {
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
@@ -782,19 +782,9 @@ public final class EntityUtils
 
         checkStorable(type);
 
-        if (info(type).primaryKey().isEmpty())
-            throw new IllegalArgumentException("PrimaryKey annotation is empty");
+        // TODO
 
-        final Object[] values = new Object[info(type).primaryKey().size()];
-
-        int i = 0;
-
-        for (final ElementInfo einfo : info(type).primaryKey())
-        {
-            values[i++] = value(bean, einfo.name());
-        }
-
-        return values;
+        return Collections.emptyMap();
     }
 
     /**
