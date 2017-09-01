@@ -95,7 +95,7 @@ class JeDataSourceImpl extends AbstractDataSource
         if (cache.contains(bean))
             throw new KeyViolationException(MESSAGE_KEY_VIOLATION);
 
-        final Class<?> type = bean.getClass();
+        final Class<T> type = (Class<T>) bean.getClass();
 
         final StorableInfo sinfo = EntityUtils.info(type);
 
@@ -281,7 +281,7 @@ class JeDataSourceImpl extends AbstractDataSource
 
         try
         {
-            final String pkey = EntityUtils.primaryKeyHash(bean);
+            final String pkey = EntityUtils.primaryKeyHash(type, keys);
 
             final DatabaseEntry key = new DatabaseEntry(getBytes(pkey));
             final DatabaseEntry data = new DatabaseEntry();
@@ -344,8 +344,19 @@ class JeDataSourceImpl extends AbstractDataSource
             throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException, TransactionException,
             OperationTimeoutException, NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.containsP(txn, cache, type, keys);
+        if (cache.containsP(keys))
+            return true;
+
+        try
+        {
+            fetchP(txn, cache, type, keys);
+        }
+        catch (final NotFoundException e)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -353,8 +364,19 @@ class JeDataSourceImpl extends AbstractDataSource
             final Object... keys) throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException,
             TransactionException, OperationTimeoutException, NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.containsA(txn, cache, type, name, keys);
+        if (cache.containsA(name, keys))
+            return true;
+
+        try
+        {
+            fetchA(txn, cache, type, name, keys);
+        }
+        catch (final NotFoundException e)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -363,7 +385,7 @@ class JeDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        final Class<?> type = bean.getClass();
+        final Class<T> type = (Class<T>) bean.getClass();
 
         final StorableInfo sinfo = EntityUtils.info(type);
 
@@ -375,10 +397,9 @@ class JeDataSourceImpl extends AbstractDataSource
         {
             final byte[] bytes = serializer.deflate(bean);
 
-            final String skey = EntityUtils.surrogateKeyHash(bean);
-            final String pkey = EntityUtils.primaryKeyHash(bean);
+            final String skey = EntityUtils.surrogateKeyHash(type, id);
 
-            final DatabaseEntry key = new DatabaseEntry(skey == null ? getBytes(pkey) : getBytes(skey));
+            final DatabaseEntry key = new DatabaseEntry(getBytes(skey));
             final DatabaseEntry data = new DatabaseEntry(bytes);
 
             final OperationStatus status = db.put(getTransaction(txn), key, data);
@@ -417,8 +438,41 @@ class JeDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.updateP(txn, cache, bean, keys);
+        final Class<T> type = (Class<T>) bean.getClass();
+
+        final StorableInfo sinfo = EntityUtils.info(type);
+
+        final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
+
+        final Database db = provider.openDatabase(txn, tableName);
+
+        try
+        {
+            final byte[] bytes = serializer.deflate(bean);
+
+            final String pkey = EntityUtils.primaryKeyHash(type, keys);
+
+            final DatabaseEntry key = new DatabaseEntry(getBytes(pkey));
+            final DatabaseEntry data = new DatabaseEntry(bytes);
+
+            final OperationStatus status = db.put(getTransaction(txn), key, data);
+
+            if (status != OperationStatus.SUCCESS)
+                throw new DataProviderException(MESSAGE_COULD_NOT_UPDATE);
+
+            /* Caches it */
+            cacheIt(txn, cache, bean);
+        }
+        catch (final DatabaseException dbe)
+        {
+            throw new DataProviderException(MESSAGE_COULD_NOT_UPDATE, dbe);
+        }
+        finally
+        {
+            provider.closeDatabase(txn, db);
+        }
+
+        return bean;
     }
 
     @Override
@@ -458,8 +512,45 @@ class JeDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.patchI(txn, cache, bean, id);
+        final Class<T> type = (Class<T>) bean.getClass();
+
+        final StorableInfo sinfo = EntityUtils.info(type);
+
+        // Copy the current values to the null ones (patch behavior)
+        final T current = fetchI(txn, cache, type, id);
+        EntityUtils.copy(current, bean, false);
+
+        final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
+
+        final Database db = provider.openDatabase(txn, tableName);
+
+        try
+        {
+            final byte[] bytes = serializer.deflate(bean);
+
+            final String skey = EntityUtils.surrogateKeyHash(type, id);
+
+            final DatabaseEntry key = new DatabaseEntry(getBytes(skey));
+            final DatabaseEntry data = new DatabaseEntry(bytes);
+
+            final OperationStatus status = db.put(getTransaction(txn), key, data);
+
+            if (status != OperationStatus.SUCCESS)
+                throw new DataProviderException(MESSAGE_COULD_NOT_UPDATE);
+
+            /* Caches it */
+            cacheIt(txn, cache, bean);
+        }
+        catch (final DatabaseException dbe)
+        {
+            throw new DataProviderException(MESSAGE_COULD_NOT_UPDATE, dbe);
+        }
+        finally
+        {
+            provider.closeDatabase(txn, db);
+        }
+
+        return bean;
     }
 
     @Override
@@ -478,8 +569,45 @@ class JeDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.patchP(txn, cache, bean, keys);
+        final Class<T> type = (Class<T>) bean.getClass();
+
+        final StorableInfo sinfo = EntityUtils.info(type);
+
+        // Copy the current values to the null ones (patch behavior)
+        final T current = fetchP(txn, cache, type, keys);
+        EntityUtils.copy(current, bean, false);
+
+        final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
+
+        final Database db = provider.openDatabase(txn, tableName);
+
+        try
+        {
+            final byte[] bytes = serializer.deflate(bean);
+
+            final String pkey = EntityUtils.primaryKeyHash(type, keys);
+
+            final DatabaseEntry key = new DatabaseEntry(getBytes(pkey));
+            final DatabaseEntry data = new DatabaseEntry(bytes);
+
+            final OperationStatus status = db.put(getTransaction(txn), key, data);
+
+            if (status != OperationStatus.SUCCESS)
+                throw new DataProviderException(MESSAGE_COULD_NOT_UPDATE);
+
+            /* Caches it */
+            cacheIt(txn, cache, bean);
+        }
+        catch (final DatabaseException dbe)
+        {
+            throw new DataProviderException(MESSAGE_COULD_NOT_UPDATE, dbe);
+        }
+        finally
+        {
+            provider.closeDatabase(txn, db);
+        }
+
+        return bean;
     }
 
     @Override
@@ -667,7 +795,7 @@ class JeDataSourceImpl extends AbstractDataSource
             // The current cursor implementation uses a buffer to hold all records and it is forward
             // only so it is safe to use a lock of type READ_COMMITTED as it has better performance
             // and less locking contention resulting on higher concurrency between threads.
-            com.sleepycat.je.Cursor cursor = db.openCursor(getTransaction(txn), CursorConfig.READ_COMMITTED);
+            final com.sleepycat.je.Cursor cursor = db.openCursor(getTransaction(txn), CursorConfig.READ_COMMITTED);
 
             while (cursor.getNext(key, data, LockMode.DEFAULT) == OperationStatus.SUCCESS)
             {
@@ -681,7 +809,7 @@ class JeDataSourceImpl extends AbstractDataSource
 
             cursor.close();
 
-            T[] resultSet = (T[]) Array.newInstance(type, lrs.size());
+            final T[] resultSet = (T[]) Array.newInstance(type, lrs.size());
             System.arraycopy(lrs.toArray(), 0, resultSet, 0, lrs.size());
 
             lrs.clear();
@@ -755,7 +883,7 @@ class JeDataSourceImpl extends AbstractDataSource
             // The current cursor implementation uses a buffer to hold all records and it is forward
             // only so it is safe to use a lock of type READ_COMMITTED as it has better performance
             // and less locking contention resulting on higher concurrency between threads.
-            com.sleepycat.je.Cursor cursor = db.openCursor(getTransaction(txn), CursorConfig.READ_COMMITTED);
+            final com.sleepycat.je.Cursor cursor = db.openCursor(getTransaction(txn), CursorConfig.READ_COMMITTED);
 
             long count = 1;
 
@@ -782,7 +910,8 @@ class JeDataSourceImpl extends AbstractDataSource
 
             cursor.close();
 
-            T[] resultSet = (T[]) Array.newInstance(type, lrs.size());
+            final T[] resultSet = (T[]) Array.newInstance(type, lrs.size());
+
             System.arraycopy(lrs.toArray(), 0, resultSet, 0, lrs.size());
 
             lrs.clear();
