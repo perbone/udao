@@ -337,12 +337,12 @@ public final class EntityUtils
         if (bean == null)
             throw new IllegalArgumentException("Bean cannot be null");
 
-        final Class<?> type = bean.getClass();
+        final Class<T> type = (Class<T>) bean.getClass();
 
         checkStorable(type);
 
-        if (!StringValidations.isValid(name))
-            throw new IllegalArgumentException("Name is invalid");
+        // if (!StringValidations.isValid(name))
+        // throw new IllegalArgumentException("Name is invalid");
 
         T result = null;
 
