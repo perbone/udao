@@ -1193,8 +1193,126 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.patchI(txn, cache, bean, id);
+        final Class<T> type = (Class<T>) bean.getClass();
+
+        final StorableInfo sinfo = EntityUtils.info(type);
+
+        final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
+
+        String setColumns = "";
+        for (ElementInfo einfo : sinfo.elements())
+        {
+            if (!einfo.virtual() && EntityUtils.value(bean, einfo.name()) != null)
+            {
+                if (StringValidations.isValid(setColumns))
+                    setColumns = setColumns + ", ";
+                setColumns = setColumns + parseColumnName(einfo) + "=?";
+            }
+        }
+
+        final String where = parseColumnName(sinfo.surrogateKey()) + "=?";
+
+        final String sql = String.format(SQL_UPDATE, tableName, setColumns, where);
+
+        final Connection conn = getConnection(txn);
+
+        try
+        {
+            final PreparedStatement pst = conn.prepareStatement(sql);
+
+            setQueryTimeout(pst);
+
+            // Columns values
+            int parameterIndex = 1;
+            for (ElementInfo einfo : sinfo.elements())
+            {
+                if (!einfo.virtual())
+                {
+                    Object value = EntityUtils.value(bean, einfo.name());
+                    if (value == null)
+                    {
+                        // do nothing (patch behavior)
+                    }
+                    else if (value instanceof TimeUnit)
+                    {
+                        String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                        pst.setObject(parameterIndex++, unit);
+                    }
+                    else if (value instanceof Enum<?>)
+                    {
+                        pst.setObject(parameterIndex++, value.toString());
+                    }
+                    else if (value instanceof Date && einfo.dataType() == DataType.DATE)
+                    {
+                        Timestamp ts = new Timestamp(((Date) value).getTime());
+                        pst.setTimestamp(parameterIndex++, ts);
+                    }
+                    else if (value instanceof Date && einfo.dataType() == DataType.LONG)
+                    {
+                        Long tmp = ((Date) value).getTime();
+                        pst.setLong(parameterIndex++, tmp);
+                    }
+                    else
+                        pst.setObject(parameterIndex++, value);
+                }
+            }
+
+            // Where column value
+            pst.setObject(parameterIndex++, id);
+
+            int affectedRows = pst.executeUpdate();
+
+            pst.close();
+            commit(txn, conn);
+
+            if (affectedRows == 0)
+                throw new NotFoundException("The surrogate key did not match any bean");
+
+            cache.removeI(id); // Clear this (potentially dirty) bean from cache
+        }
+        catch (final SQLTimeoutException sqle)
+        {
+            String msg = "The currently executing 'updateI' operation is timed out";
+            try
+            {
+                rollback(txn, conn);
+            }
+            catch (final SQLException e)
+            {
+                msg = msg + " and could not roll back the transaction; there can be inconsistencies";
+                sqle.setNextException(e);
+            }
+            throw new OperationTimeoutException(msg, sqle);
+        }
+        catch (final SQLException sqle)
+        {
+            // FIXME support sql state 23502 (not null constraint fails)
+
+            String msg = sqle.getSQLState().startsWith("23") ? MESSAGE_KEY_VIOLATION
+                    : "Could not execute the database statement";
+            try
+            {
+                rollback(txn, conn);
+            }
+            catch (final SQLException e)
+            {
+                msg = msg + " and could not roll back the transaction; there can be inconsistencies";
+                sqle.setNextException(e);
+            }
+
+            if (sqle.getSQLState().equals("23502")) // NOT NULL FAIL
+                throw new DataConstraintViolationException(msg, sqle);
+            else if (sqle.getSQLState().startsWith("23"))
+                throw new KeyViolationException(msg, sqle);
+            else
+                throw new DataProviderException(msg, sqle);
+        }
+        finally
+        {
+            close(txn, conn);
+        }
+
+        return bean;
     }
 
     @Override
@@ -1213,8 +1331,139 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        return super.patchP(txn, cache, bean, keys);
+        final Class<T> type = (Class<T>) bean.getClass();
+
+        final StorableInfo sinfo = EntityUtils.info(type);
+
+        final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
+
+        String setColumns = "";
+        for (ElementInfo einfo : sinfo.elements())
+        {
+            if (!einfo.virtual() && EntityUtils.value(bean, einfo.name()) != null)
+            {
+                if (StringValidations.isValid(setColumns))
+                    setColumns = setColumns + ", ";
+                setColumns = setColumns + parseColumnName(einfo) + "=?";
+            }
+        }
+
+        String where = "";
+        for (ElementInfo einfo : sinfo.primaryKey())
+        {
+            if (StringValidations.isValid(where))
+                where += " AND ";
+            where = where + parseColumnName(einfo) + "=?";
+        }
+
+        final String sql = String.format(SQL_UPDATE, tableName, setColumns, where);
+
+        final Connection conn = getConnection(txn);
+
+        try
+        {
+            final PreparedStatement pst = conn.prepareStatement(sql);
+
+            setQueryTimeout(pst);
+
+            // Columns values
+            int parameterIndex = 1;
+            for (ElementInfo einfo : sinfo.elements())
+            {
+                if (!einfo.virtual())
+                {
+                    Object value = EntityUtils.value(bean, einfo.name());
+                    if (value == null)
+                    {
+                        // do nothing (patch behavior)
+                    }
+                    else if (value instanceof TimeUnit)
+                    {
+                        String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                        pst.setObject(parameterIndex++, unit);
+                    }
+                    else if (value instanceof Enum<?>)
+                    {
+                        pst.setObject(parameterIndex++, value.toString());
+                    }
+                    else if (value instanceof Date && einfo.dataType() == DataType.DATE)
+                    {
+                        Timestamp ts = new Timestamp(((Date) value).getTime());
+                        pst.setTimestamp(parameterIndex++, ts);
+                    }
+                    else if (value instanceof Date && einfo.dataType() == DataType.LONG)
+                    {
+                        Long tmp = ((Date) value).getTime();
+                        pst.setLong(parameterIndex++, tmp);
+                    }
+                    else
+                        pst.setObject(parameterIndex++, value);
+                }
+            }
+
+            // Where columns values
+            for (int i = 0; i < keys.length; i++)
+            {
+                Object value = keys[i];
+                if (value instanceof Enum<?>)
+                    pst.setObject(parameterIndex++, value.toString());
+                else
+                    pst.setObject(parameterIndex++, value);
+            }
+
+            int affectedRows = pst.executeUpdate();
+
+            pst.close();
+            commit(txn, conn);
+
+            if (affectedRows == 0)
+                throw new NotFoundException("The primary key did not match any bean");
+
+            cache.removeP(keys); // Clear this (potentially dirty) bean from cache
+        }
+        catch (final SQLTimeoutException sqle)
+        {
+            String msg = "The currently executing 'updateP' operation is timed out";
+            try
+            {
+                rollback(txn, conn);
+            }
+            catch (final SQLException e)
+            {
+                msg = msg + " and could not roll back the transaction; there can be inconsistencies";
+                sqle.setNextException(e);
+            }
+            throw new OperationTimeoutException(msg, sqle);
+        }
+        catch (final SQLException sqle)
+        {
+            // FIXME support sql state 23502 (not null constraint fails)
+
+            String msg = sqle.getSQLState().startsWith("23") ? MESSAGE_KEY_VIOLATION
+                    : "Could not execute the database statement";
+            try
+            {
+                rollback(txn, conn);
+            }
+            catch (final SQLException e)
+            {
+                msg = msg + " and could not roll back the transaction; there can be inconsistencies";
+                sqle.setNextException(e);
+            }
+
+            if (sqle.getSQLState().equals("23502")) // NOT NULL FAIL
+                throw new DataConstraintViolationException(msg, sqle);
+            else if (sqle.getSQLState().startsWith("23"))
+                throw new KeyViolationException(msg, sqle);
+            else
+                throw new DataProviderException(msg, sqle);
+        }
+        finally
+        {
+            close(txn, conn);
+        }
+
+        return bean;
     }
 
     @Override
