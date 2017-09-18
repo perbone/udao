@@ -129,7 +129,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         String columns = null;
         String placehoders = null;
-        for (ElementInfo einfo : sinfo.elements())
+        for (final ElementInfo einfo : sinfo.elements())
         {
             if (!einfo.virtual())
             {
@@ -149,11 +149,11 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             setQueryTimeout(pst);
 
             int parameterIndex = 1;
-            for (ElementInfo einfo : sinfo.elements())
+            for (final ElementInfo einfo : sinfo.elements())
             {
                 if (!einfo.virtual())
                 {
-                    Object value = EntityUtils.value(bean, einfo.name());
+                    final Object value = EntityUtils.value(bean, einfo.name());
                     if (value == null)
                     {
                         pst.setObject(parameterIndex++, value);
@@ -262,7 +262,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         String columns = null;
         String placehoders = null;
-        for (ElementInfo einfo : sinfo.elements())
+        for (final ElementInfo einfo : sinfo.elements())
         {
             if (!einfo.virtual())
             {
@@ -284,11 +284,11 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             for (T bean : beans)
             {
                 int parameterIndex = 1;
-                for (ElementInfo einfo : sinfo.elements())
+                for (final ElementInfo einfo : sinfo.elements())
                 {
                     if (!einfo.virtual())
                     {
-                        Object value = EntityUtils.value(bean, einfo.name());
+                        final Object value = EntityUtils.value(bean, einfo.name());
                         if (value == null)
                         {
                             pst.setObject(parameterIndex++, value);
@@ -504,7 +504,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
 
         String where = "";
-        for (ElementInfo einfo : sinfo.primaryKey())
+        for (final ElementInfo einfo : sinfo.primaryKey())
         {
             if (StringValidations.isValid(where))
                 where += " AND ";
@@ -524,7 +524,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             int parameterIndex = 1;
             for (int i = 0; i < keys.length; i++)
             {
-                Object value = keys[i];
+                final Object value = keys[i];
                 if (value instanceof TimeUnit)
                 {
                     String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
@@ -601,7 +601,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
 
         String where = "";
-        for (ElementInfo einfo : sinfo.alternateKey(name))
+        for (final ElementInfo einfo : sinfo.alternateKey(name))
         {
             if (StringValidations.isValid(where))
                 where += " AND ";
@@ -621,7 +621,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             int parameterIndex = 1;
             for (int i = 0; i < keys.length; i++)
             {
-                Object value = keys[i];
+                final Object value = keys[i];
                 if (value instanceof TimeUnit)
                 {
                     String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
@@ -758,7 +758,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
 
         String setColumns = "";
-        for (ElementInfo einfo : sinfo.elements())
+        for (final ElementInfo einfo : sinfo.elements())
         {
             if (!einfo.virtual())
             {
@@ -782,11 +782,11 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
             // Columns values
             int parameterIndex = 1;
-            for (ElementInfo einfo : sinfo.elements())
+            for (final ElementInfo einfo : sinfo.elements())
             {
                 if (!einfo.virtual())
                 {
-                    Object value = EntityUtils.value(bean, einfo.name());
+                    final Object value = EntityUtils.value(bean, einfo.name());
                     if (value == null)
                     {
                         pst.setObject(parameterIndex++, value);
@@ -896,7 +896,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
 
         String setColumns = "";
-        for (ElementInfo einfo : sinfo.elements())
+        for (final ElementInfo einfo : sinfo.elements())
         {
             if (!einfo.virtual())
             {
@@ -907,7 +907,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         }
 
         String where = "";
-        for (ElementInfo einfo : sinfo.primaryKey())
+        for (final ElementInfo einfo : sinfo.primaryKey())
         {
             if (StringValidations.isValid(where))
                 where += " AND ";
@@ -926,11 +926,11 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
             // Columns values
             int parameterIndex = 1;
-            for (ElementInfo einfo : sinfo.elements())
+            for (final ElementInfo einfo : sinfo.elements())
             {
                 if (!einfo.virtual())
                 {
-                    Object value = EntityUtils.value(bean, einfo.name());
+                    final Object value = EntityUtils.value(bean, einfo.name());
                     if (value == null)
                     {
                         pst.setObject(parameterIndex++, value);
@@ -962,7 +962,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             // Where columns values
             for (int i = 0; i < keys.length; i++)
             {
-                Object value = keys[i];
+                final Object value = keys[i];
                 if (value instanceof Enum<?>)
                     pst.setObject(parameterIndex++, value.toString());
                 else
@@ -1047,7 +1047,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
 
         String setColumns = "";
-        for (ElementInfo einfo : sinfo.elements())
+        for (final ElementInfo einfo : sinfo.elements())
         {
             if (!einfo.virtual())
             {
@@ -1058,7 +1058,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         }
 
         String where = "";
-        for (ElementInfo einfo : sinfo.alternateKey(name))
+        for (final ElementInfo einfo : sinfo.alternateKey(name))
         {
             if (StringValidations.isValid(where))
                 where += " AND ";
@@ -1077,11 +1077,11 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
             // Columns values
             int parameterIndex = 1;
-            for (ElementInfo einfo : sinfo.elements())
+            for (final ElementInfo einfo : sinfo.elements())
             {
                 if (!einfo.virtual())
                 {
-                    Object value = EntityUtils.value(bean, einfo.name());
+                    final Object value = EntityUtils.value(bean, einfo.name());
                     if (value == null)
                     {
                         pst.setObject(parameterIndex++, value);
@@ -1113,7 +1113,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             // Where column value
             for (int i = 0; i < keys.length; i++)
             {
-                Object value = keys[i];
+                final Object value = keys[i];
                 if (value instanceof Enum<?>)
                     pst.setObject(parameterIndex++, value.toString());
                 else
@@ -1200,7 +1200,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
 
         String setColumns = "";
-        for (ElementInfo einfo : sinfo.elements())
+        for (final ElementInfo einfo : sinfo.elements())
         {
             if (!einfo.virtual() && EntityUtils.value(bean, einfo.name()) != null)
             {
@@ -1224,11 +1224,11 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
             // Columns values
             int parameterIndex = 1;
-            for (ElementInfo einfo : sinfo.elements())
+            for (final ElementInfo einfo : sinfo.elements())
             {
                 if (!einfo.virtual())
                 {
-                    Object value = EntityUtils.value(bean, einfo.name());
+                    final Object value = EntityUtils.value(bean, einfo.name());
                     if (value == null)
                     {
                         // do nothing (patch behavior)
@@ -1338,7 +1338,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
 
         String setColumns = "";
-        for (ElementInfo einfo : sinfo.elements())
+        for (final ElementInfo einfo : sinfo.elements())
         {
             if (!einfo.virtual() && EntityUtils.value(bean, einfo.name()) != null)
             {
@@ -1349,7 +1349,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         }
 
         String where = "";
-        for (ElementInfo einfo : sinfo.primaryKey())
+        for (final ElementInfo einfo : sinfo.primaryKey())
         {
             if (StringValidations.isValid(where))
                 where += " AND ";
@@ -1368,11 +1368,11 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
             // Columns values
             int parameterIndex = 1;
-            for (ElementInfo einfo : sinfo.elements())
+            for (final ElementInfo einfo : sinfo.elements())
             {
                 if (!einfo.virtual())
                 {
-                    Object value = EntityUtils.value(bean, einfo.name());
+                    final Object value = EntityUtils.value(bean, einfo.name());
                     if (value == null)
                     {
                         // do nothing (patch behavior)
@@ -1404,7 +1404,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             // Where columns values
             for (int i = 0; i < keys.length; i++)
             {
-                Object value = keys[i];
+                final Object value = keys[i];
                 if (value instanceof Enum<?>)
                     pst.setObject(parameterIndex++, value.toString());
                 else
@@ -2107,10 +2107,10 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         if (sinfo.surrogateKey() != null)
             elements.add(sinfo.surrogateKey());
         else
-            for (ElementInfo einfo : sinfo.primaryKey())
+            for (final ElementInfo einfo : sinfo.primaryKey())
                 elements.add(einfo);
 
-        for (ElementInfo einfo : elements)
+        for (final ElementInfo einfo : elements)
         {
             if (StringValidations.isValid(orderBy))
                 orderBy = orderBy + ", ";
@@ -2138,10 +2138,10 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         for (Object bean : beans)
         {
-            for (ElementInfo einfo : sinfo.nonVirtualElements())
+            for (final ElementInfo einfo : sinfo.nonVirtualElements())
             {
                 String name = einfo.firstAliasForTarget(DEFAULT_TARGET_NAME);
-                Object value = EntityUtils.value(bean, einfo.name());
+                final Object value = EntityUtils.value(bean, einfo.name());
                 if (value != null)
                 {
                     if (result.containsKey(name))
@@ -2537,13 +2537,13 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         // FIXME support for all SQL/Java types
         for (int i = 1; i <= meta.getColumnCount(); i++)
         {
-            Object value = rs.getObject(i);
+            final Object value = rs.getObject(i);
             if (rs.wasNull())
                 continue;
 
-            String colName = meta.getColumnName(i);
+            final String colName = meta.getColumnName(i);
 
-            Class<?> beanFieldType = EntityUtils.info(bean.getClass(), colName).type();
+            final Class<?> beanFieldType = EntityUtils.info(bean.getClass(), colName).type();
 
             if (beanFieldType.equals(TimeUnit.class))
             {
