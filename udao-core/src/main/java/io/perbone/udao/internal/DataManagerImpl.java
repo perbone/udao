@@ -2113,29 +2113,12 @@ public final class DataManagerImpl implements DataManager
         for (final Field field : AnnotationScanner.scanFields(type, Metadata.class))
         {
             final Class<?> ftype = field.getType();
+            final Object value = EntityUtils.value(bean, field.getName());
 
             final Metadata.MetadataType mtype = field.getAnnotation(Metadata.class).value();
 
-            /* LAST_ACCESS_DATE */
-            if (mtype == MetadataType.LAST_ACCESS_DATE)
-            {
-                checkSupportedTypes(field, mtype, Date.class, Long.class);
-
-                if (ftype.equals(Date.class))
-                    EntityUtils.value(bean, field.getName(), new Date(now));
-                else if (ftype.equals(Long.class))
-                    EntityUtils.value(bean, field.getName(), now);
-            }
-            /* LAST_ACCESS_AGENT */
-            else if (mtype == MetadataType.LAST_ACCESS_SERVICE)
-            {
-                checkSupportedTypes(field, mtype, String.class);
-
-                if (ftype.equals(String.class))
-                    EntityUtils.value(bean, field.getName(), EntityUtils.hostName());
-            }
             /* LAST_MODIFIED_DATE */
-            else if (mtype == MetadataType.LAST_MODIFIED_DATE)
+            if (mtype == MetadataType.LAST_MODIFIED_DATE && value == null)
             {
                 checkSupportedTypes(field, mtype, Date.class, Long.class);
 
@@ -2145,7 +2128,7 @@ public final class DataManagerImpl implements DataManager
                     EntityUtils.value(bean, field.getName(), now);
             }
             /* LAST_MODIFIED_AGENT */
-            else if (mtype == MetadataType.LAST_MODIFIED_SERVICE)
+            else if (mtype == MetadataType.LAST_MODIFIED_SERVICE && value == null)
             {
                 checkSupportedTypes(field, mtype, String.class);
 
