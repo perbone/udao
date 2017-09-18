@@ -160,7 +160,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof TimeUnit)
                     {
-                        String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                        final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                         pst.setObject(parameterIndex++, unit);
                     }
                     else if (value instanceof Enum<?>)
@@ -295,7 +295,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                         }
                         else if (value instanceof TimeUnit)
                         {
-                            String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                            final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                             pst.setObject(parameterIndex++, unit);
                         }
                         else if (value instanceof Enum<?>)
@@ -527,7 +527,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                 final Object value = keys[i];
                 if (value instanceof TimeUnit)
                 {
-                    String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                    final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                     pst.setObject(parameterIndex++, unit);
                 }
                 else if (value instanceof Enum<?>)
@@ -536,17 +536,17 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                 }
                 else if (value instanceof Long && sinfo.primaryKey().get(i).dataType() == DataType.DATE)
                 {
-                    Date dt = new Date((Long) value);
+                    final Date dt = new Date((Long) value);
                     pst.setObject(parameterIndex++, dt);
                 }
                 else if (value instanceof Date && sinfo.primaryKey().get(i).dataType() == DataType.DATE)
                 {
-                    Timestamp ts = new Timestamp(((Date) value).getTime());
+                    final Timestamp ts = new Timestamp(((Date) value).getTime());
                     pst.setTimestamp(parameterIndex++, ts);
                 }
                 else if (value instanceof Date && sinfo.primaryKey().get(i).dataType() == DataType.LONG)
                 {
-                    Long tmp = ((Date) value).getTime();
+                    final Long tmp = ((Date) value).getTime();
                     pst.setLong(parameterIndex++, tmp);
                 }
                 else
@@ -624,7 +624,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                 final Object value = keys[i];
                 if (value instanceof TimeUnit)
                 {
-                    String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                    final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                     pst.setObject(parameterIndex++, unit);
                 }
                 else if (value instanceof Enum<?>)
@@ -633,17 +633,17 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                 }
                 else if (value instanceof Long && sinfo.alternateKey(name).get(i).dataType() == DataType.DATE)
                 {
-                    Date dt = new Date((Long) value);
+                    final Date dt = new Date((Long) value);
                     pst.setObject(parameterIndex++, dt);
                 }
                 else if (value instanceof Date && sinfo.alternateKey(name).get(i).dataType() == DataType.DATE)
                 {
-                    Timestamp ts = new Timestamp(((Date) value).getTime());
+                    final Timestamp ts = new Timestamp(((Date) value).getTime());
                     pst.setTimestamp(parameterIndex++, ts);
                 }
                 else if (value instanceof Date && sinfo.alternateKey(name).get(i).dataType() == DataType.LONG)
                 {
-                    Long tmp = ((Date) value).getTime();
+                    final Long tmp = ((Date) value).getTime();
                     pst.setLong(parameterIndex++, tmp);
                 }
                 else
@@ -793,7 +793,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof TimeUnit)
                     {
-                        String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                        final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                         pst.setObject(parameterIndex++, unit);
                     }
                     else if (value instanceof Enum<?>)
@@ -802,12 +802,12 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.DATE)
                     {
-                        Timestamp ts = new Timestamp(((Date) value).getTime());
+                        final Timestamp ts = new Timestamp(((Date) value).getTime());
                         pst.setTimestamp(parameterIndex++, ts);
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.LONG)
                     {
-                        Long tmp = ((Date) value).getTime();
+                        final Long tmp = ((Date) value).getTime();
                         pst.setLong(parameterIndex++, tmp);
                     }
                     else
@@ -937,7 +937,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof TimeUnit)
                     {
-                        String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                        final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                         pst.setObject(parameterIndex++, unit);
                     }
                     else if (value instanceof Enum<?>)
@@ -946,12 +946,12 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.DATE)
                     {
-                        Timestamp ts = new Timestamp(((Date) value).getTime());
+                        final Timestamp ts = new Timestamp(((Date) value).getTime());
                         pst.setTimestamp(parameterIndex++, ts);
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.LONG)
                     {
-                        Long tmp = ((Date) value).getTime();
+                        final Long tmp = ((Date) value).getTime();
                         pst.setLong(parameterIndex++, tmp);
                     }
                     else
@@ -1088,7 +1088,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof TimeUnit)
                     {
-                        String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                        final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                         pst.setObject(parameterIndex++, unit);
                     }
                     else if (value instanceof Enum<?>)
@@ -1097,12 +1097,12 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.DATE)
                     {
-                        Timestamp ts = new Timestamp(((Date) value).getTime());
+                        final Timestamp ts = new Timestamp(((Date) value).getTime());
                         pst.setTimestamp(parameterIndex++, ts);
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.LONG)
                     {
-                        Long tmp = ((Date) value).getTime();
+                        final Long tmp = ((Date) value).getTime();
                         pst.setLong(parameterIndex++, tmp);
                     }
                     else
@@ -1235,7 +1235,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof TimeUnit)
                     {
-                        String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                        final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                         pst.setObject(parameterIndex++, unit);
                     }
                     else if (value instanceof Enum<?>)
@@ -1244,12 +1244,12 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.DATE)
                     {
-                        Timestamp ts = new Timestamp(((Date) value).getTime());
+                        final Timestamp ts = new Timestamp(((Date) value).getTime());
                         pst.setTimestamp(parameterIndex++, ts);
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.LONG)
                     {
-                        Long tmp = ((Date) value).getTime();
+                        final Long tmp = ((Date) value).getTime();
                         pst.setLong(parameterIndex++, tmp);
                     }
                     else
@@ -1379,7 +1379,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof TimeUnit)
                     {
-                        String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                        final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                         pst.setObject(parameterIndex++, unit);
                     }
                     else if (value instanceof Enum<?>)
@@ -1388,12 +1388,12 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.DATE)
                     {
-                        Timestamp ts = new Timestamp(((Date) value).getTime());
+                        final Timestamp ts = new Timestamp(((Date) value).getTime());
                         pst.setTimestamp(parameterIndex++, ts);
                     }
                     else if (value instanceof Date && einfo.dataType() == DataType.LONG)
                     {
-                        Long tmp = ((Date) value).getTime();
+                        final Long tmp = ((Date) value).getTime();
                         pst.setLong(parameterIndex++, tmp);
                     }
                     else
@@ -1889,11 +1889,11 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         try
         {
-            PreparedStatement pst = conn.prepareStatement(sql);
+            final PreparedStatement pst = conn.prepareStatement(sql);
 
             setQueryTimeout(pst);
 
-            ResultSet rs = pst.executeQuery();
+            final ResultSet rs = pst.executeQuery();
 
             if (rs.next())
                 count = rs.getLong(1);
@@ -2052,7 +2052,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
     {
         String where = "";
 
-        for (String name : whereValues.keySet())
+        for (final String name : whereValues.keySet())
         {
             boolean useInOperator = false;
 
@@ -2102,7 +2102,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
     {
         String orderBy = "";
 
-        List<ElementInfo> elements = new ArrayList<ElementInfo>();
+        final List<ElementInfo> elements = new ArrayList<ElementInfo>();
 
         if (sinfo.surrogateKey() != null)
             elements.add(sinfo.surrogateKey());
@@ -2132,15 +2132,15 @@ public class JdbcDataSourceImpl extends AbstractDataSource
      */
     private Map<String, List<Object>> parseWhereValuesByExample(final Class<?> type, final Object... beans)
     {
-        Map<String, List<Object>> result = new Hashtable<String, List<Object>>();
+        final Map<String, List<Object>> result = new Hashtable<String, List<Object>>();
 
-        StorableInfo sinfo = EntityUtils.info(type);
+        final StorableInfo sinfo = EntityUtils.info(type);
 
-        for (Object bean : beans)
+        for (final Object bean : beans)
         {
             for (final ElementInfo einfo : sinfo.nonVirtualElements())
             {
-                String name = einfo.firstAliasForTarget(DEFAULT_TARGET_NAME);
+                final String name = einfo.firstAliasForTarget(DEFAULT_TARGET_NAME);
                 final Object value = EntityUtils.value(bean, einfo.name());
                 if (value != null)
                 {
@@ -2350,9 +2350,9 @@ public class JdbcDataSourceImpl extends AbstractDataSource
     private String toJdbcValues(final ElementInfo einfo, final Object... values)
     {
         String result = null;
-        for (Object value : values)
+        for (final Object value : values)
         {
-            String tmp = toJdbcValue(einfo, value);
+            final String tmp = toJdbcValue(einfo, value);
             result = result == null ? tmp : result + ", " + tmp;
         }
         return result;
@@ -2396,10 +2396,10 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         String order = null;
 
-        for (Pair<String, Boolean> element : query.order())
+        for (final Pair<String, Boolean> element : query.order())
         {
-            String column = EntityUtils.info(type, element.first()).firstAliasForTarget(DEFAULT_TARGET_NAME);
-            String asc = element.second() ? "ASC" : "DESC";
+            final String column = EntityUtils.info(type, element.first()).firstAliasForTarget(DEFAULT_TARGET_NAME);
+            final String asc = element.second() ? "ASC" : "DESC";
 
             if (order == null)
                 order = String.format(" ORDER BY %s %s", column, asc);
@@ -2451,11 +2451,11 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             if (!values.isEmpty())
             {
                 int parameterIndex = 1;
-                for (Object value : values)
+                for (final Object value : values)
                 {
                     if (value instanceof TimeUnit)
                     {
-                        String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
+                        final String unit = EntityUtils.parseTimeUnit((TimeUnit) value);
                         pst.setObject(parameterIndex++, unit);
                     }
                     else if (value instanceof Enum<?>)
@@ -2473,7 +2473,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
             while (rs.next())
             {
-                T bean = makeEntity(type, rs); // Instantiate and populate a new bean
+                final T bean = makeEntity(type, rs); // Instantiate and populate a new bean
                 cacheIt(txn, cache, bean); // Caches the new bean
                 lrs.add(bean); // Adds to the cursor collection
             }
