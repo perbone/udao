@@ -2038,7 +2038,7 @@ public final class DataManagerImpl implements DataManager
                     TimeUnit unit = TimeUnit.MILLISECONDS; // Defaults to MILLISECONDS
                     if (EntityUtils.hasTimeToLiveUnit(bean))
                     {
-                        TimeUnit tmp = EntityUtils.timeToLiveUnit(bean);
+                        final TimeUnit tmp = EntityUtils.timeToLiveUnit(bean);
                         unit = tmp == null ? unit : tmp;
                     }
                     long expires = now + TimeUnit.MILLISECONDS.convert(ttl, unit);
@@ -2148,7 +2148,7 @@ public final class DataManagerImpl implements DataManager
 
                     if (EntityUtils.hasTimeToLiveUnit(bean))
                     {
-                        TimeUnit tmp = EntityUtils.timeToLiveUnit(bean);
+                        final TimeUnit tmp = EntityUtils.timeToLiveUnit(bean);
                         unit = tmp == null ? unit : tmp;
                     }
 
