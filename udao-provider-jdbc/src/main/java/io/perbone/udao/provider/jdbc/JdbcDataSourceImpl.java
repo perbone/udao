@@ -818,7 +818,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             // Where column value
             pst.setObject(parameterIndex++, id);
 
-            int affectedRows = pst.executeUpdate();
+            final int affectedRows = pst.executeUpdate();
 
             pst.close();
             commit(txn, conn);
@@ -969,7 +969,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     pst.setObject(parameterIndex++, value);
             }
 
-            int affectedRows = pst.executeUpdate();
+            final int affectedRows = pst.executeUpdate();
 
             pst.close();
             commit(txn, conn);
@@ -1065,7 +1065,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             where = where + parseColumnName(einfo) + "=?";
         }
 
-        String sql = String.format(SQL_UPDATE, tableName, setColumns, where);
+        final String sql = String.format(SQL_UPDATE, tableName, setColumns, where);
 
         Connection conn = getConnection(txn);
 
@@ -1120,7 +1120,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     pst.setObject(parameterIndex++, value);
             }
 
-            int affectedRows = pst.executeUpdate();
+            final int affectedRows = pst.executeUpdate();
 
             pst.close();
             pst = null;
@@ -1260,7 +1260,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             // Where column value
             pst.setObject(parameterIndex++, id);
 
-            int affectedRows = pst.executeUpdate();
+            final int affectedRows = pst.executeUpdate();
 
             pst.close();
             commit(txn, conn);
@@ -1411,7 +1411,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     pst.setObject(parameterIndex++, value);
             }
 
-            int affectedRows = pst.executeUpdate();
+            final int affectedRows = pst.executeUpdate();
 
             pst.close();
             commit(txn, conn);
@@ -1583,7 +1583,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             // Where column value
             pst.setObject(1, id);
 
-            int affectedRows = pst.executeUpdate();
+            final int affectedRows = pst.executeUpdate();
 
             pst.close();
             commit(txn, conn);
@@ -1689,7 +1689,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                 }
             }
 
-            int affectedRows = pst.executeUpdate();
+            final int affectedRows = pst.executeUpdate();
 
             pst.close();
             commit(txn, conn);
@@ -1881,7 +1881,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
 
-        String sql = String.format(SQL_SELECT_COUNT, tableName);
+        final String sql = String.format(SQL_SELECT_COUNT, tableName);
 
         long count = -1;
 
