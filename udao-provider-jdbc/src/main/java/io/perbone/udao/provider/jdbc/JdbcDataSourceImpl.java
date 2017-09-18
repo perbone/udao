@@ -458,7 +458,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                 throw new NotFoundException("The surrogate key did not match any bean");
             }
 
-            bean = (T) makeEntity(type, rs); // Instantiate and populate a new bean
+            bean = makeEntity(type, rs); // Instantiate and populate a new bean
             cacheIt(txn, cache, bean); // Caches the new bean
 
             rs.close();
@@ -563,7 +563,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                 throw new NotFoundException("The primary key did not match any bean");
             }
 
-            bean = (T) makeEntity(type, rs); // Instantiate and populate a new bean
+            bean = makeEntity(type, rs); // Instantiate and populate a new bean
             cacheIt(txn, cache, bean); // Caches the new bean
 
             rs.close();
@@ -660,7 +660,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                 throw new NotFoundException("The alternate key did not match any bean");
             }
 
-            bean = (T) makeEntity(type, rs); // Instantiate and populate a new bean
+            bean = makeEntity(type, rs); // Instantiate and populate a new bean
             cacheIt(txn, cache, bean); // Caches the new bean
 
             rs.close();
@@ -2473,9 +2473,9 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
             while (rs.next())
             {
-                Object bean = makeEntity(type, rs); // Instantiate and populate a new bean
+                T bean = makeEntity(type, rs); // Instantiate and populate a new bean
                 cacheIt(txn, cache, bean); // Caches the new bean
-                lrs.add((T) bean); // Adds to the cursor collection
+                lrs.add(bean); // Adds to the cursor collection
             }
 
             rs.close();
@@ -2515,9 +2515,9 @@ public class JdbcDataSourceImpl extends AbstractDataSource
      * @throws SQLException
      */
     @SuppressWarnings("rawtypes")
-    private Object makeEntity(final Class<?> type, final ResultSet rs) throws IllegalArgumentException, SQLException
+    private <T> T makeEntity(final Class<T> type, final ResultSet rs) throws IllegalArgumentException, SQLException
     {
-        Object bean = null;
+        T bean = null;
 
         final ResultSetMetaData meta = rs.getMetaData();
 
