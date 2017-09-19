@@ -315,7 +315,8 @@ public final class EntityUtils
                         return einfo;
         }
 
-        throw new IllegalArgumentException(String.format("Element [%s] not found", name));
+        return null;
+        // throw new IllegalArgumentException(String.format("Element [%s] not found", name));
     }
 
     /**
@@ -1228,9 +1229,9 @@ public final class EntityUtils
             final DataType dataType = parseDataType(field.getType(), element);
 
             final InstanceType instanceType = element.instanceType();
-            
+
             final Short index = element.index();
-            
+
             final Boolean nullable = !field.isAnnotationPresent(NotNull.class);
 
             final Map<String, List<String>> aliases = field.isAnnotationPresent(Aliases.class)
