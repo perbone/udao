@@ -765,7 +765,8 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         String setColumns = "";
         for (final ElementInfo einfo : sinfo.elements())
         {
-            if (!einfo.virtual())
+            if (!einfo.virtual()
+                    && (!einfo.metadata() || (einfo.metadata() && EntityUtils.value(bean, einfo.name()) != null)))
             {
                 if (StringValidations.isValid(setColumns))
                     setColumns = setColumns + ", ";
@@ -790,7 +791,8 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             int parameterIndex = 1;
             for (final ElementInfo einfo : sinfo.elements())
             {
-                if (!einfo.virtual())
+                if (!einfo.virtual()
+                        && (!einfo.metadata() || (einfo.metadata() && EntityUtils.value(bean, einfo.name()) != null)))
                 {
                     final Object value = EntityUtils.value(bean, einfo.name());
                     if (value == null)
@@ -904,7 +906,8 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         String setColumns = "";
         for (final ElementInfo einfo : sinfo.elements())
         {
-            if (!einfo.virtual())
+            if (!einfo.virtual()
+                    && (!einfo.metadata() || (einfo.metadata() && EntityUtils.value(bean, einfo.name()) != null)))
             {
                 if (StringValidations.isValid(setColumns))
                     setColumns = setColumns + ", ";
@@ -935,7 +938,8 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             int parameterIndex = 1;
             for (final ElementInfo einfo : sinfo.elements())
             {
-                if (!einfo.virtual())
+                if (!einfo.virtual()
+                        && (!einfo.metadata() || (einfo.metadata() && EntityUtils.value(bean, einfo.name()) != null)))
                 {
                     final Object value = EntityUtils.value(bean, einfo.name());
                     if (value == null)
@@ -1056,7 +1060,8 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         String setColumns = "";
         for (final ElementInfo einfo : sinfo.elements())
         {
-            if (!einfo.virtual())
+            if (!einfo.virtual()
+                    && (!einfo.metadata() || (einfo.metadata() && EntityUtils.value(bean, einfo.name()) != null)))
             {
                 if (StringValidations.isValid(setColumns))
                     setColumns = setColumns + ", ";
@@ -1087,7 +1092,8 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             int parameterIndex = 1;
             for (final ElementInfo einfo : sinfo.elements())
             {
-                if (!einfo.virtual())
+                if (!einfo.virtual()
+                        && (!einfo.metadata() || (einfo.metadata() && EntityUtils.value(bean, einfo.name()) != null)))
                 {
                     final Object value = EntityUtils.value(bean, einfo.name());
                     if (value == null)
@@ -2559,7 +2565,12 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
             final String colName = meta.getColumnName(i);
 
-            final Class<?> beanFieldType = EntityUtils.info(bean.getClass(), colName).type();
+            final ElementInfo einfo = EntityUtils.info(bean.getClass(), colName);
+
+            if (einfo == null)
+                continue;
+
+            final Class<?> beanFieldType = einfo.type();
 
             if (beanFieldType.equals(TimeUnit.class))
             {
