@@ -138,6 +138,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             }
         }
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_INSERT, tableName, columns, placehoders);
 
         final Connection conn = getConnection(txn);
@@ -271,6 +272,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             }
         }
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_INSERT, tableName, columns, placehoders);
 
         Connection conn = getConnection(txn);
@@ -435,6 +437,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String where = parseColumnName(sinfo.surrogateKey()) + "=?";
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_SELECT_ONE, tableName, where);
 
         final Connection conn = getConnection(txn);
@@ -511,6 +514,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             where = where + parseColumnName(einfo) + "=?";
         }
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_SELECT_ONE, tableName, where);
 
         final Connection conn = getConnection(txn);
@@ -608,6 +612,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             where = where + parseColumnName(einfo) + "=?";
         }
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_SELECT_ONE, tableName, where);
 
         final Connection conn = getConnection(txn);
@@ -770,6 +775,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String where = parseColumnName(sinfo.surrogateKey()) + "=?";
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_UPDATE, tableName, setColumns, where);
 
         final Connection conn = getConnection(txn);
@@ -914,6 +920,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             where = where + parseColumnName(einfo) + "=?";
         }
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_UPDATE, tableName, setColumns, where);
 
         final Connection conn = getConnection(txn);
@@ -1065,6 +1072,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             where = where + parseColumnName(einfo) + "=?";
         }
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_UPDATE, tableName, setColumns, where);
 
         Connection conn = getConnection(txn);
@@ -1212,6 +1220,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String where = parseColumnName(sinfo.surrogateKey()) + "=?";
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_UPDATE, tableName, setColumns, where);
 
         final Connection conn = getConnection(txn);
@@ -1356,6 +1365,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             where = where + parseColumnName(einfo) + "=?";
         }
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_UPDATE, tableName, setColumns, where);
 
         final Connection conn = getConnection(txn);
@@ -1570,6 +1580,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String where = parseColumnName(sinfo.surrogateKey()) + "=?";
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_DELETE, tableName, where);
 
         final Connection conn = getConnection(txn);
@@ -1667,6 +1678,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String where = parseWhereStatement(whereValues);
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_DELETE, tableName, where);
 
         final Connection conn = getConnection(txn);
@@ -1780,6 +1792,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String orderBy = parseColumnName(sinfo.surrogateKey());
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_SELECT_ALL, tableName, orderBy);
 
         return openCursor(txn, cache, type, sql);
@@ -1818,6 +1831,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String orderBy = parseOrderByStatement(sinfo);
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_SELECT_BY_EXAMPLE, tableName, where, orderBy);
 
         final List<Object> values = new ArrayList<Object>();
@@ -1848,6 +1862,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String order = parseQueryOrder(type, query);
 
+        // FIXME sql statement string should be cached
         final String sql = parseQuerySelect("SELECT * FROM " + tableName, where, order, limit);
 
         return openCursor(txn, cache, type, sql);
@@ -1881,6 +1896,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
 
         final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
 
+        // FIXME sql statement string should be cached
         final String sql = String.format(SQL_SELECT_COUNT, tableName);
 
         long count = -1;
