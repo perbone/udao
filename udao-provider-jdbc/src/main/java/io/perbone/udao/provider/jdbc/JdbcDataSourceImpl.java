@@ -834,7 +834,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             if (affectedRows == 0)
                 throw new NotFoundException("The surrogate key did not match any bean");
 
-            cacheIt(txn, cache, bean); // Updates the cache
+            cache.removeI(id); // Clear this (potentially dirty) bean from cache
         }
         catch (final SQLTimeoutException sqle)
         {
@@ -988,7 +988,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             if (affectedRows == 0)
                 throw new NotFoundException("The primary key did not match any bean");
 
-            cacheIt(txn, cache, bean); // Updates the cache
+            cache.removeP(keys); // Clear this (potentially dirty) bean from cache
         }
         catch (final SQLTimeoutException sqle)
         {
@@ -1143,7 +1143,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             if (affectedRows == 0)
                 throw new NotFoundException("The alternate key did not match any bean");
 
-            cacheIt(txn, cache, bean); // Updates the cache
+            cache.removeA(name, keys); // Clears the cache for this bean
         }
         catch (final SQLTimeoutException sqle)
         {
