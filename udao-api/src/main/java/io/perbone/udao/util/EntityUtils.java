@@ -41,6 +41,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
+import javax.validation.constraints.NotNull;
+
 import io.perbone.toolbox.annotation.AnnotationScanner;
 import io.perbone.toolbox.collection.Pair;
 import io.perbone.toolbox.formatter.HexFormatter;
@@ -1226,6 +1228,10 @@ public final class EntityUtils
             final DataType dataType = parseDataType(field.getType(), element);
 
             final InstanceType instanceType = element.instanceType();
+            
+            final Short index = element.index();
+            
+            final Boolean nullable = !field.isAnnotationPresent(NotNull.class);
 
             final Map<String, List<String>> aliases = field.isAnnotationPresent(Aliases.class)
                     ? parseAliases(field.getAnnotation(Aliases.class).value())
@@ -1256,7 +1262,9 @@ public final class EntityUtils
                     .aliases(aliases)
                     .virtual(virtual)
                     .metadata(metadata)
-                    .metadataType(metadata ? field.getAnnotation(Metadata.class).value() : null);
+                    .metadataType(metadata ? field.getAnnotation(Metadata.class).value() : null)
+                    .index(index)
+                    .nullable(nullable);
 
             elements.add(einfo);
         }

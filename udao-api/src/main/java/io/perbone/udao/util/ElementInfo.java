@@ -43,6 +43,8 @@ public final class ElementInfo
     private Boolean virtual;
     private Boolean metadata;
     private MetadataType metadataType;
+    private Short index;
+    private Boolean nullable;
 
     public ElementInfo()
     {
@@ -53,6 +55,9 @@ public final class ElementInfo
         aliases = new ConcurrentHashMap<String, List<String>>();
         virtual = null;
         metadata = null;
+        metadataType = null;
+        index = null;
+        nullable = null;
     }
 
     public Map<String, List<String>> aliases()
@@ -115,6 +120,28 @@ public final class ElementInfo
     public ElementInfo metadataType(final MetadataType metadataType)
     {
         this.metadataType = metadataType;
+        return this;
+    }
+
+    public Short index()
+    {
+        return index;
+    }
+
+    public ElementInfo index(final Short index)
+    {
+        this.index = index;
+        return this;
+    }
+
+    public Boolean nullable()
+    {
+        return nullable;
+    }
+
+    public ElementInfo nullable(final Boolean nullable)
+    {
+        this.nullable = nullable;
         return this;
     }
 
