@@ -174,6 +174,8 @@ public interface Cursor<T> extends Iterable<T>, AutoCloseable
      *             if this cursor is already closed
      * @throws DataException
      *             if cannot moves the current position
+     * 
+     * @since 0.7.0
      */
     void previous() throws IllegalStateException, DataException;
 
@@ -191,6 +193,8 @@ public interface Cursor<T> extends Iterable<T>, AutoCloseable
      *             if this cursor is already closed
      * @throws DataException
      *             if cannot moves the current position
+     * 
+     * @since 0.7.0
      */
     void absolute(long offset) throws IllegalStateException, DataException;
 
