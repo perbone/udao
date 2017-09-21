@@ -205,6 +205,25 @@ public class SimpleCursor<T> implements Cursor<T>
     }
 
     @Override
+    public void absolute(final long offset) throws IllegalStateException, DataException
+    {
+        checkOpen();
+
+        if (offset > 0)
+            currentPos = (int) offset;
+        else if (offset < 0)
+            currentPos = size - (int) Math.abs(offset);
+    }
+
+    @Override
+    public void relative(final long offset) throws IllegalStateException, DataException
+    {
+        checkOpen();
+
+        currentPos += (int) offset;
+    }
+
+    @Override
     public long position() throws IllegalStateException, DataException
     {
         checkOpen();

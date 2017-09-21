@@ -178,6 +178,38 @@ public interface Cursor<T> extends Iterable<T>, AutoCloseable
     void previous() throws IllegalStateException, DataException;
 
     /**
+     * Move the cursor to an absolute position, forward or backward, from the first position or from
+     * the last position respectively.
+     * <p>
+     * This call has no effect if the result set is empty.
+     * 
+     * @param offset
+     *            the position
+     * 
+     * 
+     * @throws IllegalStateException
+     *             if this cursor is already closed
+     * @throws DataException
+     *             if cannot moves the current position
+     */
+    void absolute(long offset) throws IllegalStateException, DataException;
+
+    /**
+     * Move the cursor by a relative amount, forward or backward, from the current position.
+     * <p>
+     * This call has no effect if the result set is empty.
+     * 
+     * @param offset
+     *            the position
+     * 
+     * @throws IllegalStateException
+     *             if this cursor is already closed
+     * @throws DataException
+     *             if cannot moves the current position
+     */
+    void relative(long offset) throws IllegalStateException, DataException;
+
+    /**
      * Tells whether or not this cursor position is at <i>begin of set</i>.
      * <p>
      * A cursor is at begin of set if either it is empty or was moved before the first bean.
