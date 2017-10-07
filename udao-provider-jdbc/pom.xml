@@ -13,7 +13,7 @@
 	<name>UDAO Provider JDBC</name>
 	<description>Universal Data Access Object JDBC Provider</description>
 	<properties>
-		<tomcat-jdbc.version>9.0.0.M26</tomcat-jdbc.version>
+		<tomcat-jdbc.version>9.0.1</tomcat-jdbc.version>
 	</properties>
 	<build>
 		<plugins>
