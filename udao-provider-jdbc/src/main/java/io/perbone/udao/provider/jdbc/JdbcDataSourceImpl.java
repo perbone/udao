@@ -2394,7 +2394,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
             break;
         case POSTGRESQL:
             limit = String.format(" LIMIT %d OFFSET %d", query.limit(),
-                    query.hasOffset() ? (query.offset() == 1 ? 0L : query.offset()) : 0L);
+                    query.hasOffset() ? (query.offset() == 1 ? 0L : query.offset() - 1) : 0L);
             break;
         case MYSQL:
             limit = String.format(" LIMIT %d,%d", query.hasOffset() ? (query.offset() == 1 ? 0L : query.offset()) : 0L,
