@@ -2401,8 +2401,8 @@ public class JdbcDataSourceImpl extends AbstractDataSource
                     query.hasOffset() ? (query.offset() == 1 ? 0L : query.offset() - 1) : 0L, query.limit());
             break;
         case DERBY:
-            limit = String.format(" OFFSET %d ROWS FETCH NEXT %d ROWS ONLY", query.hasOffset() ? query.offset() : 0L,
-                    query.limit());
+            limit = String.format(" OFFSET %d ROWS FETCH NEXT %d ROWS ONLY",
+                    query.hasOffset() ? query.offset() - 1 : 0L, query.limit());
             break;
         default:
             // do nothing
