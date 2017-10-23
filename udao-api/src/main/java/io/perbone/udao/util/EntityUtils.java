@@ -448,6 +448,25 @@ public final class EntityUtils
             case TIMESTAMP:
                 field.set(bean, value == null ? null : new Date(((Date) value).getTime()));
                 break;
+            case BYTES:
+                if (value == null)
+                    field.set(bean, value);
+                else
+                {
+                    if (byte[].class.equals(field.getType()))
+                    {
+                        byte[] tmp = new byte[((byte[]) value).length];
+                        System.arraycopy(value, 0, tmp, 0, tmp.length);
+                        field.set(bean, tmp);
+                    }
+                    else if (Byte[].class.equals(field.getType()))
+                    {
+                        Byte[] tmp = value.getClass().equals(Byte[].class) ? (Byte[]) value : toObjects((byte[]) value);
+                        field.set(bean, tmp);
+                    }
+                }
+
+                break;
             default:
                 field.set(bean, value);
             }
@@ -456,6 +475,13 @@ public final class EntityUtils
         {
             throw new IllegalArgumentException(String.format("Cannot set the value for element [%s]", name));
         }
+    }
+
+    private static Byte[] toObjects(byte[] bytesPrim)
+    {
+        Byte[] bytes = new Byte[bytesPrim.length];
+        Arrays.setAll(bytes, n -> bytesPrim[n]);
+        return bytes;
     }
 
     /**
@@ -1311,6 +1337,8 @@ public final class EntityUtils
             return DataType.DOUBLE;
         else if (Void.class.equals(fieldType))
             return DataType.VOID;
+        else if (byte[].class.equals(fieldType) || Byte[].class.equals(fieldType))
+            return DataType.BYTES;
         else
             return DataType.UNKNOWN;
     }
