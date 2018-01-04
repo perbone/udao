@@ -13,7 +13,7 @@
 	<name>UDAO Provider JE</name>
 	<description>Universal Data Access Object Berkeley DB Java Edition Provider</description>
 	<properties>
-		<je.version>7.4.5</je.version>
+		<je.version>7.5.11</je.version>
 	</properties>
 	<repositories>
 		<repository>
