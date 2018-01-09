@@ -1905,6 +1905,39 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         // FIXME sql statement string should be cached
         final String sql = String.format(SQL_SELECT_COUNT, tableName);
 
+        return count(txn, sql);
+    }
+
+    @Override
+    public long countX(final Transaction txn, final Cache cache, final Class<?> type, final Object... beans)
+            throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException, TransactionException,
+            OperationTimeoutException, NotEnoughResourceException, DataProviderException
+    {
+        // TODO Auto-generated method stub
+        return super.countX(txn, cache, type, beans);
+    }
+
+    @Override
+    public long countQ(final Transaction txn, final Cache cache, final Class<?> type, final Query query)
+            throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException, TransactionException,
+            OperationTimeoutException, NotEnoughResourceException, DataProviderException
+    {
+        checkDialectSupport(DERBY, MYSQL, ORACLE, POSTGRESQL);
+
+        final StorableInfo sinfo = EntityUtils.info(type);
+
+        final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
+
+        final String where = parseQueryWhere(type, query);
+
+        // FIXME sql statement string should be cached
+        final String sql = String.format(SQL_SELECT_COUNT + " %s ", tableName, where);
+
+        return count(txn, sql);
+    }
+
+    private long count(final Transaction txn, final String sql)
+    {
         long count = -1;
 
         Connection conn = getConnection(txn);
@@ -1937,24 +1970,6 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         }
 
         return count;
-    }
-
-    @Override
-    public long countX(final Transaction txn, final Cache cache, final Class<?> type, final Object... beans)
-            throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException, TransactionException,
-            OperationTimeoutException, NotEnoughResourceException, DataProviderException
-    {
-        // TODO Auto-generated method stub
-        return super.countX(txn, cache, type, beans);
-    }
-
-    @Override
-    public long countQ(final Transaction txn, final Cache cache, final Class<?> type, final Query query)
-            throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException, TransactionException,
-            OperationTimeoutException, NotEnoughResourceException, DataProviderException
-    {
-        // TODO Auto-generated method stub
-        return super.countQ(txn, cache, type, query);
     }
 
     @Override
@@ -2237,7 +2252,7 @@ public class JdbcDataSourceImpl extends AbstractDataSource
         if (!query.hasWhere())
             return null;
 
-        String where = "WHERE ";
+        String where = " WHERE ";
         ElementInfo einfo;
 
         for (Expression exp : query.where())
