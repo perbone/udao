@@ -58,7 +58,7 @@ import io.perbone.udao.util.StorableInfo;
  * @author Paulo Perbone <pauloperbone@yahoo.com>
  * @since 0.1.0
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({ "unchecked", "unused" })
 class JeDataSourceImpl extends AbstractDataSource
 {
     public static final String CHARSET_UTF8 = "UTF-8";
@@ -708,8 +708,34 @@ class JeDataSourceImpl extends AbstractDataSource
             NotFoundException, KeyViolationException, DataConstraintViolationException, OperationTimeoutException,
             NotEnoughResourceException, DataProviderException
     {
-        // TODO Auto-generated method stub
-        super.deleteI(txn, cache, type, id);
+        final StorableInfo sinfo = EntityUtils.info(type);
+
+        final String tableName = parseTableName(DEFAULT_TARGET_NAME, sinfo);
+
+        final Database db = provider.openDatabase(txn, tableName);
+
+        try
+        {
+            final String skey = EntityUtils.surrogateKeyHash(type, id);
+
+            final DatabaseEntry key = new DatabaseEntry(getBytes(skey));
+
+            final OperationStatus status = db.delete(getTransaction(txn), key);
+
+            if (status == OperationStatus.NOTFOUND)
+                throw new NotFoundException("The key did not match any bean");
+        }
+        catch (final DatabaseException dbe)
+        {
+            throw new DataProviderException(dbe);
+        }
+        finally
+        {
+            provider.closeDatabase(txn, db);
+        }
+
+        /* Deletes from cache */
+        cache.deleteI(id);
     }
 
     @Override
