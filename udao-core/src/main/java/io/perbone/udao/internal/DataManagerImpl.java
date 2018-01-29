@@ -1656,6 +1656,16 @@ public final class DataManagerImpl implements DataManager
     }
 
     @Override
+    public Transaction current() throws UnsupportedOperationException, IllegalStateException, TransactionException,
+            OperationTimeoutException, NotEnoughResourceException, DataException
+    {
+        checkOpen();
+        checkTransaction(txn);
+
+        return txn;
+    }
+
+    @Override
     public void commit(final Transaction txn)
             throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException, TransactionException,
             OperationTimeoutException, NotEnoughResourceException, DataException

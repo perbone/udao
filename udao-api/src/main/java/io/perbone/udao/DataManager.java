@@ -261,8 +261,11 @@ public interface DataManager extends AutoCloseable
 
     /** Transaction operations support */
 
-    Transaction begin() throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException,
-            TransactionException, OperationTimeoutException, NotEnoughResourceException, DataException;
+    Transaction begin() throws UnsupportedOperationException, IllegalStateException, TransactionException,
+            OperationTimeoutException, NotEnoughResourceException, DataException;
+
+    Transaction current() throws UnsupportedOperationException, IllegalStateException, TransactionException,
+            OperationTimeoutException, NotEnoughResourceException, DataException;
 
     void commit(Transaction txn) throws UnsupportedOperationException, IllegalStateException, IllegalArgumentException,
             TransactionException, OperationTimeoutException, NotEnoughResourceException, DataException;
