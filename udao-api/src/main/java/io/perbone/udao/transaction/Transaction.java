@@ -25,7 +25,7 @@ package io.perbone.udao.transaction;
  * @author Paulo Perbone <pauloperbone@yahoo.com>
  * @since 0.1.0
  */
-public interface Transaction
+public interface Transaction extends AutoCloseable
 {
     /**
      * Returns this transaction id.

@@ -69,6 +69,12 @@ class JeTransactionImpl implements Transaction
         return active.get();
     }
 
+    @Override
+    public void close() throws Exception
+    {
+        invalidate();
+    }
+
     com.sleepycat.je.Transaction getTransaction()
     {
         checkValid();

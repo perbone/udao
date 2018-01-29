@@ -68,6 +68,12 @@ class JdbcTransactionImpl implements Transaction
         return active.get();
     }
 
+    @Override
+    public void close() throws Exception
+    {
+        invalidate();
+    }
+
     Connection getConnection()
     {
         checkValid();
